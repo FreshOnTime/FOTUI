@@ -1,0 +1,9 @@
+<button class="appearance-none" (click)="click()">
+  <p-avatar
+    [label]="initials"
+    shape="circle"
+    [image]="photoUrl"
+    class="select-none"
+  />
+  <img [src]="photoUrl" (error)="onImageError()" class="hidden" />
+</button>
