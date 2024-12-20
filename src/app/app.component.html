@@ -5,6 +5,32 @@
   <app-navbar></app-navbar>
   }
   <router-outlet />
+  <button (click)="register()">Register</button>
+  <button (click)="login()">Login</button>
+  <button (click)="logout()">Logout</button>
+
+  @if(authService.currentUserSignal()){
+  <div>
+    <h2>User Profile</h2>
+    <p>Name: {{ authService.currentUserSignal()?.displayName }}</p>
+    <p>Email: {{ authService.currentUserSignal()?.email }}</p>
+
+    @if(!authService.currentUserSignal()?.emailVerified){
+    <p>
+      Email is not verified.
+      <button>Resend Verification Email</button>
+    </p>
+    } @if(authService.currentUserSignal()?.emailVerified){
+    <p>Your email is verified!</p>
+    }
+  </div>
+  } @if(!authService.currentUserSignal()){
+  <div>
+    <p>Please log in to view your profile.</p>
+  </div>
+  }
+
+  <!-- Show Footer -->
   @if(showFooter){
   <app-footer></app-footer>
   }
