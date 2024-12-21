@@ -3,9 +3,7 @@ import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { StepperModule } from 'primeng/stepper';
 import { InputTextModule } from 'primeng/inputtext';
-import { ToggleButton } from 'primeng/togglebutton';
-import { IconField } from 'primeng/iconfield';
-import { InputIcon } from 'primeng/inputicon';
+import { Checkbox } from 'primeng/checkbox';
 import { PasswordModule } from 'primeng/password';
 
 @Component({
@@ -16,10 +14,8 @@ import { PasswordModule } from 'primeng/password';
     InputTextModule,
     ButtonModule,
     StepperModule,
-    ToggleButton,
     PasswordModule,
-    IconField,
-    InputIcon,
+    Checkbox,
   ],
 
   templateUrl: './sign-in.component.html',
