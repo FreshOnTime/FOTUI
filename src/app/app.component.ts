@@ -15,52 +15,22 @@ export class AppComponent {
   public showNavbar: boolean = true;
   public showFooter: boolean = true;
 
-  private routesWithoutNavbarOrFooter: string[] = ['login', 'signup'];
+  private routesWithoutNavbarOrFooter: string[] = [
+    'login',
+    'sign-up',
+    'sign-in',
+  ];
 
   constructor(private router: Router, public authService: AuthService) {
     this.router.events.subscribe(() => {
       const currentRoute = this.router.url;
-      this.showNavbar =
-        !this.routesWithoutNavbarOrFooter.includes(currentRoute);
-      this.showFooter =
-        !this.routesWithoutNavbarOrFooter.includes(currentRoute);
-    });
-  }
 
-  register() {
-    this.authService
-      .register(
-        'bhanukadassanayake@gmail.com',
-        'Test@123',
-        'Bhanuka Dassanayake'
-      )
-      .subscribe({
-        next: () => console.log('User registered successfully'),
-        error: (error) => console.error(error),
+      this.routesWithoutNavbarOrFooter.forEach((route) => {
+        if (currentRoute.includes(route)) {
+          this.showNavbar = false;
+          this.showFooter = false;
+        }
       });
-  }
-
-  login() {
-    this.authService
-      .login('bhanukadassanayake@gmail.com', 'Test@123')
-      .subscribe({
-        next: () => console.log('User logged in successfully'),
-        error: (error) => console.error(error),
-      });
-  }
-
-  logout() {
-    this.authService.logout().subscribe({
-      next: () => console.log('User logged out successfully'),
-      error: (error) => console.error(error),
-    });
-  }
-
-  ngOnInit() {
-    this.authService.user$.subscribe({
-      next: (user) => {
-        console.log('User:', user);
-      },
     });
   }
 }
