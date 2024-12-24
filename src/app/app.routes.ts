@@ -5,11 +5,13 @@ import { loggedOutGuard } from './features/login/guards/logged-out.guard';
 import { VerifyEmailComponent } from './features/login/pages/verify-email/verify-email.component';
 import { generalGuardGuard } from './shared/guards/general-guard.guard';
 import { verifyEmailPageGuardGuard } from './features/login/guards/verify-email-page-guard.guard';
+import { HomePageComponent } from './features/home/home-page/home-page.component';
+import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: SignInComponent,
+    component: HomePageComponent,
     canActivate: [generalGuardGuard],
   },
   {
@@ -26,5 +28,9 @@ export const routes: Routes = [
     path: 'verify-email',
     component: VerifyEmailComponent,
     canActivate: [verifyEmailPageGuardGuard],
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent,
   },
 ];
