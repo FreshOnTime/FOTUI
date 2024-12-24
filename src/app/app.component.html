@@ -1,8 +1,6 @@
-<body class="min-h-screen w-full flex flex-col justify-between">
-  @if(showFooter){
-  <app-navbar></app-navbar>
-  }
-  <router-outlet />
+<body class="h-screen w-full overflow-auto flex flex-col">
+  <app-navbar class="sticky top-0 z-50"></app-navbar>
+  <router-outlet class="flex-grow" />
 
   @if(showFooter){
   <app-footer></app-footer>
