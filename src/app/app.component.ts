@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { NavigationStart, Router, RouterOutlet } from '@angular/router';
-import { FooterComponent } from './core/components/footer/footer.component';
-import { NavbarComponent } from './core/components/navbar/navbar.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { AuthService } from './core/services/auth/auth.service';
 
 @Component({

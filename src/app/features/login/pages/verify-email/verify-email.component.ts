@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Card } from 'primeng/card';
-import { AuthService } from '../../services/auth/auth.service';
-import { AuthUser } from '../../models/auth-user';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 import {
   ActivatedRouteSnapshot,
   CanDeactivate,
@@ -11,6 +10,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
+import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-verify-email',
@@ -20,19 +20,13 @@ import {
   styleUrl: './verify-email.component.scss',
 })
 export class VerifyEmailComponent {
-  currentUser: AuthUser | null = null;
+  currentUser: User | null = null;
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.authService.user$.subscribe((user) => {
       if (user) {
-        this.currentUser = {
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          emailVerified: user.emailVerified,
-          uid: user.uid,
-        };
+        this.currentUser = user;
       } else {
         this.currentUser = null;
       }

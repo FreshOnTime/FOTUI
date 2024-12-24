@@ -7,9 +7,9 @@ import { DividerModule } from 'primeng/divider';
 import { TruncatePipe } from '../../pipes/truncate/truncate.pipe';
 import { Tooltip } from 'primeng/tooltip';
 import { AvatarComponent } from '../avatar/avatar.component';
-import { AuthService } from '../../services/auth/auth.service';
-import { AuthUser } from '../../models/auth-user';
+import { AuthService } from '../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
+import { User } from '@angular/fire/auth';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -34,14 +34,14 @@ export class NavbarComponent {
   public userPhotoUrl: string =
     'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png';
 
-  public user: AuthUser | null = null;
+  public user: User | null = null;
 
   constructor(private authService: AuthService, private router: Router) {
     this.updateIsMobile();
 
     this.authService.user$.subscribe((user) => {
-      this.user = user as AuthUser;
-      console.log('User', this.user, user);
+      this.user = user as User;
+      console.log('User', this.user);
     });
   }
 

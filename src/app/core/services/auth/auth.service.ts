@@ -15,7 +15,6 @@ import {
 import { from, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment.template';
-import { AuthUser } from '../../models/auth-user';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +26,7 @@ export class AuthService {
   };
 
   user$: Observable<User | null>;
-  currentUserSignal = signal<AuthUser | null | undefined>(undefined);
+  currentUserSignal = signal<User | null | undefined>(undefined);
 
   isAuthenticated = computed(
     () =>
@@ -45,13 +44,7 @@ export class AuthService {
     // Initialize signal with current auth state
     const currentUser = this.auth.currentUser;
     if (currentUser) {
-      this.currentUserSignal.set({
-        uid: currentUser.uid,
-        email: currentUser.email,
-        displayName: currentUser.displayName,
-        emailVerified: currentUser.emailVerified,
-        photoURL: currentUser.photoURL,
-      });
+      this.currentUserSignal.set(currentUser);
     } else {
       this.currentUserSignal.set(null);
     }
@@ -62,13 +55,7 @@ export class AuthService {
   private setupAuthStateListener(): void {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        const authUser: AuthUser = {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          emailVerified: user.emailVerified,
-          photoURL: user.photoURL,
-        };
+        const authUser: User = user;
         // Update the signal whenever auth state changes
         this.currentUserSignal.set(authUser);
       } else {
@@ -168,7 +155,7 @@ export class AuthService {
       'auth/user-disabled': 'This account has been disabled.',
       'auth/too-many-requests': 'Too many attempts. Try again later.',
       'auth/email-already-in-use': 'This email is already registered.',
-      'auth/weak-password': 'Password must be at least 6 characters.',
+      'auth/weak-password': 'Password must be at least 8 characters.',
       'auth/operation-not-allowed':
         'This action is not allowed. Contact support.',
       'auth/requires-recent-login': 'Please log in again to continue.',

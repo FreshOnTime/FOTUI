@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { SignInComponent } from './core/pages/sign-in/sign-in.component';
-import { SignUpComponent } from './core/pages/sign-up/sign-up.component';
-import { loggedOutGuard } from './core/router-guards/logged-out.guard';
-import { VerifyEmailComponent } from './core/pages/verify-email/verify-email.component';
-import { generalGuardGuard } from './core/router-guards/general-guard.guard';
-import { verifyEmailPageGuardGuard } from './core/router-guards/verify-email-page-guard.guard';
+import { SignInComponent } from './features/login/pages/sign-in/sign-in.component';
+import { SignUpComponent } from './features/login/pages/sign-up/sign-up.component';
+import { loggedOutGuard } from './features/login/guards/logged-out.guard';
+import { VerifyEmailComponent } from './features/login/pages/verify-email/verify-email.component';
+import { generalGuardGuard } from './shared/guards/general-guard.guard';
+import { verifyEmailPageGuardGuard } from './features/login/guards/verify-email-page-guard.guard';
 
 export const routes: Routes = [
   {
