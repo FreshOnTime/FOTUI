@@ -1,33 +1,9 @@
-<body
-  class="min-h-screen w-full flex flex-col max-w-screen-xl mx-auto justify-between"
->
+<body class="min-h-screen w-full flex flex-col justify-between">
   @if(showFooter){
   <app-navbar></app-navbar>
   }
   <router-outlet />
 
-  <!-- @if(authService.currentUserSignal()){
-  <div>
-    <h2>User Profile</h2>
-    <p>Name: {{ authService.currentUserSignal()?.displayName }}</p>
-    <p>Email: {{ authService.currentUserSignal()?.email }}</p>
-
-    @if(!authService.currentUserSignal()?.emailVerified){
-    <p>
-      Email is not verified.
-      <button>Resend Verification Email</button>
-    </p>
-    } @if(authService.currentUserSignal()?.emailVerified){
-    <p>Your email is verified!</p>
-    }
-  </div>
-  } @if(!authService.currentUserSignal()){
-  <div>
-    <p>Please log in to view your profile.</p>
-  </div>
-  } -->
-
-  <!-- Show Footer -->
   @if(showFooter){
   <app-footer></app-footer>
   }

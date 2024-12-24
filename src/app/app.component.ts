@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './core/components/footer/footer.component';
 import { NavbarComponent } from './core/components/navbar/navbar.component';
 import { AuthService } from './core/services/auth/auth.service';
@@ -19,18 +19,27 @@ export class AppComponent {
     'login',
     'sign-up',
     'sign-in',
+    'verify-email',
   ];
 
-  constructor(private router: Router, public authService: AuthService) {
-    this.router.events.subscribe(() => {
-      const currentRoute = this.router.url;
-
-      this.routesWithoutNavbarOrFooter.forEach((route) => {
-        if (currentRoute.includes(route)) {
-          this.showNavbar = false;
-          this.showFooter = false;
-        }
-      });
+  constructor(
+    private router: Router,
+    public authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.updateNavFooterVisibility(event.url);
+      }
     });
+  }
+
+  private updateNavFooterVisibility(currentRoute: string): void {
+    const shouldHide = this.routesWithoutNavbarOrFooter.some((route) =>
+      currentRoute.includes(route)
+    );
+    this.showNavbar = !shouldHide;
+    this.showFooter = !shouldHide;
+    this.cdr.detectChanges();
   }
 }

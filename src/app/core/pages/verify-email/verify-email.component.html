@@ -1,0 +1,22 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+>
+  <p-card header="Verify your email" class="md:w-1/2 w-full max-w-md">
+    <p class="m-0 text-gray-500 text-sm">
+      We've sent a verification link to {{ currentUser?.email }}. Please check
+      your inbox and click the link to verify your email address.
+    </p>
+    <ng-template #footer>
+      <p class="text-sm text-gray-800 mb-4">Didn't receive the email?</p>
+      <p-button
+        label="Resend Email"
+        icon="pi pi-envelope"
+        class="w-full"
+        fluid
+        severity="contrast"
+        (onClick)="sendVerificationEmail()"
+        [disabled]="this.currentUser && this.currentUser.emailVerified"
+      ></p-button>
+    </ng-template>
+  </p-card>
+</div>

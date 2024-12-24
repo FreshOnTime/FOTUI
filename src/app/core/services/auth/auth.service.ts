@@ -26,11 +26,9 @@ export class AuthService {
     handleCodeInApp: true,
   };
 
-  // Improved typing for user streams and signals
   user$: Observable<User | null>;
   currentUserSignal = signal<AuthUser | null | undefined>(undefined);
 
-  // Computed signals for common auth states
   isAuthenticated = computed(
     () =>
       this.currentUserSignal() !== null &&
@@ -43,6 +41,21 @@ export class AuthService {
 
   constructor(private auth: Auth) {
     this.user$ = user(this.auth);
+
+    // Initialize signal with current auth state
+    const currentUser = this.auth.currentUser;
+    if (currentUser) {
+      this.currentUserSignal.set({
+        uid: currentUser.uid,
+        email: currentUser.email,
+        displayName: currentUser.displayName,
+        emailVerified: currentUser.emailVerified,
+        photoURL: currentUser.photoURL,
+      });
+    } else {
+      this.currentUserSignal.set(null);
+    }
+
     this.setupAuthStateListener();
   }
 
@@ -88,17 +101,18 @@ export class AuthService {
     return from(
       signInWithEmailAndPassword(this.auth, email, password).then(
         async (response) => {
-          if (!response.user.emailVerified) {
-            await sendEmailVerification(response.user, this.actionCodeSettings);
-            throw new Error(
-              'Please verify your email. A new verification email has been sent.'
-            );
-          }
+          // if (!response.user.emailVerified) {
+          //   await sendEmailVerification(response.user, this.actionCodeSettings);
+          //   throw new Error(
+          //     'Please verify your email. A new verification email has been sent.'
+          //   );
+          // }
         }
       )
     ).pipe(
       catchError((error: AuthError) => {
         const errorMessage = this.getErrorMessage(error.code);
+
         return throwError(() => new Error(errorMessage));
       })
     );
@@ -125,14 +139,19 @@ export class AuthService {
     );
   }
 
-  public resendVerificationEmail(): Observable<void> {
+  public resendVerificationEmail(
+    url: string = `${environment.ENV_FRONTEND_DOMAIN}`
+  ): Observable<void> {
     const currentUser = this.auth.currentUser;
     if (!currentUser) {
       return throwError(() => new Error('No user is currently signed in'));
     }
 
     return from(
-      sendEmailVerification(currentUser, this.actionCodeSettings)
+      sendEmailVerification(currentUser, {
+        url: url,
+        handleCodeInApp: true,
+      })
     ).pipe(
       catchError((error: AuthError) => {
         const errorMessage = this.getErrorMessage(error.code);
@@ -143,23 +162,21 @@ export class AuthService {
 
   private getErrorMessage(errorCode: string): string {
     const errorMessages: Record<string, string> = {
-      'auth/user-not-found': 'User not found',
-      'auth/wrong-password': 'Invalid password',
-      'auth/invalid-email': 'Invalid email format',
-      'auth/user-disabled': 'This account has been disabled',
-      'auth/too-many-requests':
-        'Too many failed login attempts. Please try again later',
-      'auth/email-already-in-use': 'Email already in use',
-      'auth/weak-password': 'Password should be at least 6 characters',
+      'auth/user-not-found': 'No account found with this email.',
+      'auth/wrong-password': 'Incorrect password. Please try again.',
+      'auth/invalid-email': 'Please enter a valid email address.',
+      'auth/user-disabled': 'This account has been disabled.',
+      'auth/too-many-requests': 'Too many attempts. Try again later.',
+      'auth/email-already-in-use': 'This email is already registered.',
+      'auth/weak-password': 'Password must be at least 6 characters.',
       'auth/operation-not-allowed':
-        'Email/password accounts are not enabled. Enable them in Firebase Console',
-      'auth/requires-recent-login':
-        'Please log in again to complete this action',
-      'auth/invalid-action-code': 'Invalid or expired action code',
-      'auth/network-request-failed':
-        'Network error. Please check your connection',
+        'This action is not allowed. Contact support.',
+      'auth/requires-recent-login': 'Please log in again to continue.',
+      'auth/invalid-action-code': 'The link is invalid or expired.',
+      'auth/network-request-failed': 'Network error. Check your connection.',
+      'auth/invalid-credential': 'Invalid credentials. Please try again.',
     };
 
-    return errorMessages[errorCode] || `Authentication failed: ${errorCode}`;
+    return errorMessages[errorCode] || `Something went wrong. (${errorCode})`;
   }
 }

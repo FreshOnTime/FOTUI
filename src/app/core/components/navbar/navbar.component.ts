@@ -7,6 +7,9 @@ import { DividerModule } from 'primeng/divider';
 import { TruncatePipe } from '../../pipes/truncate/truncate.pipe';
 import { Tooltip } from 'primeng/tooltip';
 import { AvatarComponent } from '../avatar/avatar.component';
+import { AuthService } from '../../services/auth/auth.service';
+import { AuthUser } from '../../models/auth-user';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -27,12 +30,19 @@ export class NavbarComponent {
   public isMobile: boolean = false;
   public userAddress: string =
     '75/13-A, 1st Floor, 1st Main, 1st Cross, 7th Block, Koramangala,';
-  public userName: string = 'John Doe';
+  public userName: string = '';
   public userPhotoUrl: string =
     'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png';
 
-  constructor() {
+  public user: AuthUser | null = null;
+
+  constructor(private authService: AuthService, private router: Router) {
     this.updateIsMobile();
+
+    this.authService.user$.subscribe((user) => {
+      this.user = user as AuthUser;
+      console.log('User', this.user, user);
+    });
   }
 
   public editUserAddress(): void {
@@ -47,6 +57,15 @@ export class NavbarComponent {
   public onUserClick(): void {
     // User click logic
     console.log('User clicked');
+
+    this.authService.logout().subscribe({
+      next: () => {
+        console.log('Logged out');
+      },
+      error: (err) => {
+        console.error('Error logging out', err);
+      },
+    });
   }
 
   public onNotificationsClick(): void {
@@ -57,6 +76,14 @@ export class NavbarComponent {
   public onBagsClick(): void {
     // Bags click logic
     console.log('Bags clicked');
+  }
+
+  public onSignInClick(): void {
+    this.router.navigate(['/sign-in']);
+  }
+
+  public onSignUpClick(): void {
+    this.router.navigate(['/sign-up']);
   }
 
   @HostListener('window:resize', ['$event'])
