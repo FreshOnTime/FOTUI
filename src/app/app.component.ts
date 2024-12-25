@@ -3,11 +3,12 @@ import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { AuthService } from './core/services/auth/auth.service';
+import { ScrollTop } from 'primeng/scrolltop';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, ScrollTop],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

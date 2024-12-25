@@ -28,8 +28,7 @@ import { User } from '@angular/fire/auth';
 })
 export class NavbarComponent {
   public isMobile: boolean = false;
-  public userAddress: string =
-    '75/13-A, 1st Floor, 1st Main, 1st Cross, 7th Block, Koramangala,';
+  public userAddress: string = '';
   public userName: string = '';
   public userPhotoUrl: string =
     'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png';
@@ -41,7 +40,7 @@ export class NavbarComponent {
 
     this.authService.user$.subscribe((user) => {
       this.user = user as User;
-      console.log('User', this.user);
+      // console.log('User', this.user);
     });
   }
 

@@ -1,8 +1,23 @@
-<body class="h-screen w-full overflow-auto flex flex-col">
+<body class="h-screen w-full overflow-auto relative flex flex-col">
+  @if (showNavbar) {
   <app-navbar class="sticky top-0 z-50"></app-navbar>
-  <router-outlet class="flex-grow" />
+  }
+
+  <router-outlet class="flex-grow-0" />
 
   @if(showFooter){
-  <app-footer></app-footer>
+  <app-footer class="mt-auto"></app-footer>
   }
+
+  <p-scrolltop
+    target="parent"
+    class="sticky right-4 bottom-4"
+    [threshold]="50"
+    [buttonProps]="{
+    severity: 'contrast',
+    raised: true,
+    rounded: true,
+
+  }"
+  />
 </body>
