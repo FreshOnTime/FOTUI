@@ -7,6 +7,7 @@ import { generalGuardGuard } from './shared/guards/general-guard.guard';
 import { verifyEmailPageGuardGuard } from './features/login/guards/verify-email-page-guard.guard';
 import { HomePageComponent } from './features/home/home-page/home-page.component';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
+import { SearchResultsComponent } from './feature/search-results/search-results.component';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,10 @@ export const routes: Routes = [
     path: 'verify-email',
     component: VerifyEmailComponent,
     canActivate: [verifyEmailPageGuardGuard],
+  },
+  {
+    path: 'search/:query',
+    component: SearchResultsComponent,
   },
   {
     path: '**',
