@@ -4,11 +4,12 @@ import { SplitButton } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { Skeleton } from 'primeng/skeleton';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-search-results',
   standalone: true,
-  imports: [ProductCardComponent, SplitButton, Skeleton],
+  imports: [ProductCardComponent, SplitButton, Skeleton, ButtonModule],
   templateUrl: './search-results.component.html',
   styleUrl: './search-results.component.scss',
 })
@@ -25,7 +26,7 @@ export class SearchResultsComponent {
   ];
 
   public searchQuery: string | null | undefined = undefined;
-  public pageLoading: boolean = true;
+  public pageLoading: boolean = false;
 
   constructor(private route: ActivatedRoute) {}
 
