@@ -155,7 +155,7 @@
 
         }
       </div>
-      <div class="lg:col-span-2 lg:px-2 py-4">
+      <div class="lg:col-span-2 lg:px-2 py-0">
         @if (pageLoading) {
         <p-skeleton styleClass="mb-2" height="1.25rem" />
         <p-skeleton styleClass="mb-2" height="1.25rem" />
@@ -175,7 +175,10 @@
         <quill-view [content]="longDescription" format="html"></quill-view>
         }
       </div>
-      <app-product-reviews productId="hgcjgkhhg" />
+      <app-product-reviews
+        productId="hgcjgkhhg"
+        class="lg:col-span-2 lg:px-2 mt-0"
+      />
     </div>
   </div>
 </section>
