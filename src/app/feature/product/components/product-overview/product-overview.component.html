@@ -1,0 +1,144 @@
+<section class="py-2 bg-white antialiased">
+  <div class="max-w-screen-2xl px-4 mx-auto 2xl:px-0">
+    <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
+      <div class="shrink-0 w-full max-w-md lg:max-w-lg aspect-[4/3] mx-auto">
+        @if (pageLoading) {
+        <p-skeleton styleClass="mb-2 " height="100%" width="100%" />
+        } @else {
+        <p-image
+          class="w-full object-contain"
+          src="/tomatoes-transformed.jpeg"
+          alt=""
+          [preview]="true"
+        />}
+      </div>
+      <div class="mt-6 sm:mt-8 lg:mt-0">
+        @if (pageLoading) {
+        <p-skeleton
+          styleClass="mb-2 text-xl  sm:text-3xl"
+          height="1.2em"
+          width="80%"
+        />
+        } @else {
+        <h1 class="text-xl font-semibold text-gray-900 sm:text-3xl">
+          Fresh Red Tomatoes
+        </h1>
+        }
+        <div class="mt-4 sm:items-center sm:gap-4 sm:flex">
+          @if (pageLoading) {
+          <p-skeleton
+            styleClass="mb-2 text-2xl  sm:text-3xl"
+            height="1.2em"
+            ngClass="w-full sm:w-1/2"
+            [style]="{ width: '70%' }"
+          />
+          }@else {
+          <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl">
+            $1,249.99
+          </p>
+          } @if (pageLoading) {
+          <p-skeleton
+            styleClass="mb-2 text-2xl sm:text-3xl"
+            height="1.25rem"
+            ngClass="w-full"
+            [style]="{ width: '55%' }"
+          />
+          } @else if (reviews > 4) {
+          <div class="flex items-center gap-2 mt-2 sm:mt-0">
+            <p-rating [readonly]="true" [(ngModel)]="rating">
+              <ng-template #onicon>
+                <svg
+                  class="h-4 w-4 text-yellow-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z"
+                  />
+                </svg>
+              </ng-template>
+              <ng-template #officon>
+                <svg
+                  class="h-4 w-4 text-gray-300"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z"
+                  />
+                </svg>
+              </ng-template>
+            </p-rating>
+            <p
+              class="text-sm font-medium leading-none text-gray-500 dark:text-gray-400"
+            >
+              ({{ rating }})
+            </p>
+            <a
+              href="#"
+              class="text-sm font-medium leading-none text-gray-900 underline hover:no-underline dark:text-white"
+            >
+              {{ reviews }} Reviews
+            </a>
+          </div>
+          }
+        </div>
+
+        <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
+          <a
+            href="#"
+            title=""
+            class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            role="button"
+          >
+            <svg
+              class="w-5 h-5 -ms-2 me-2"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+              />
+            </svg>
+            Add to favorites
+          </a>
+
+          <button
+            class="text-white mt-4 sm:mt-0 bg-orange-400 hover:bg-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center"
+          >
+            <i class="pi pi-shopping-bag me-2"></i>
+
+            Add to bag
+            <i class="pi pi-chevron-down ms-2"></i>
+          </button>
+        </div>
+
+        <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
+
+        <p class="mb-6 text-gray-500 dark:text-gray-400">
+          Studio quality three mic array for crystal clear calls and voice
+          recordings. Six-speaker sound system for a remarkably robust and
+          high-quality audio experience. Up to 256GB of ultrafast SSD storage.
+        </p>
+
+        <p class="text-gray-500 dark:text-gray-400">
+          Two Thunderbolt USB 4 ports and up to two USB 3 ports. Ultrafast Wi-Fi
+          6 and Bluetooth 5.0 wireless. Color matched Magic Mouse with Magic
+          Keyboard or Magic Keyboard with Touch ID.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
