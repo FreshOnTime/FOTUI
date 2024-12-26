@@ -8,7 +8,7 @@
         <p-image
           class="w-full object-contain"
           src="/tomatoes-transformed.jpeg"
-          alt=""
+          alt="{{ name }} image"
           [preview]="true"
         />}
       </div>
@@ -89,7 +89,8 @@
 
         <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
           <button
-            class="flex w-full sm:w-fit items-center disabled:bg-gray-100 disabled:text-gray-300 cursor-pointer select-none justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            pRipple
+            class="flex w-full sm:w-fit items-center disabled:bg-gray-100 disabled:text-gray-300 cursor-pointer select-none justify-center py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700"
             [disabled]="pageLoading"
           >
             <i
@@ -104,6 +105,7 @@
             class="text-white w-full sm:w-fit mt-4 disabled:bg-orange-100 sm:mt-0 cursor-pointer select-none bg-orange-400 hover:bg-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center"
             (click)="menu.toggle($event)"
             [disabled]="pageLoading"
+            pRipple
           >
             <i
               class="pi pi-shopping-bag me-2"

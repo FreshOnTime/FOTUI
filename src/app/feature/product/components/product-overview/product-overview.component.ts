@@ -6,11 +6,12 @@ import { Image } from 'primeng/image';
 import { Menu } from 'primeng/menu';
 import { Rating } from 'primeng/rating';
 import { Skeleton } from 'primeng/skeleton';
+import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-product-overview',
   standalone: true,
-  imports: [Image, Skeleton, Rating, CommonModule, FormsModule, Menu],
+  imports: [Image, Skeleton, Rating, CommonModule, FormsModule, Menu, Ripple],
   templateUrl: './product-overview.component.html',
   styleUrl: './product-overview.component.scss',
 })
