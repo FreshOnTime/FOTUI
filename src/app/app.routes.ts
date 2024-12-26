@@ -8,7 +8,7 @@ import { verifyEmailPageGuardGuard } from './features/login/guards/verify-email-
 import { HomePageComponent } from './features/home/home-page/home-page.component';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { SearchResultsComponent } from './features/search-results/search-results.component';
-import { ProductOverviewComponent } from './features/product-overview/product-overview.component';
+import { ProductOverviewComponent } from './features/product/product-overview/product-overview.component';
 
 export const routes: Routes = [
   {

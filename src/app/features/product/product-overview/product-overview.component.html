@@ -44,6 +44,7 @@
             [style]="{ width: '55%' }"
           />
           } @else if (reviews > 4) {
+
           <div class="flex items-center gap-2 mt-2 sm:mt-0">
             <p-rating [readonly]="true" [(ngModel)]="rating">
               <ng-template #onicon>
@@ -73,6 +74,7 @@
                 </svg>
               </ng-template>
             </p-rating>
+
             <p
               class="text-sm font-medium leading-none text-gray-500 dark:text-gray-400"
             >
@@ -87,7 +89,26 @@
           }
         </div>
 
-        <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
+        @if (!pageLoading) {
+        <ul class="mt-2 flex flex-wrap items-center gap-4">
+          @for (badge of getBadgesData(); track badge[0]) {
+          <li class="flex items-center gap-2">
+            <i class="  {{ badge[1] }} text-gray-500"></i>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              {{ badge[0] }}
+            </p>
+          </li>
+          }
+        </ul>
+        } @if (getDiscountTagColor() && !pageLoading) {
+        <div class="mb-4 flex items-center mt-1 justify-between gap-4">
+          <p-tag [severity]="getDiscountTagColor()">
+            Up to {{ discount }}% off
+          </p-tag>
+        </div>
+        }
+
+        <div class="mt-4 sm:gap-4 sm:items-center sm:flex sm:mt-6">
           <button
             pRipple
             class="flex w-full sm:w-fit items-center disabled:bg-gray-100 disabled:text-gray-300 cursor-pointer select-none justify-center py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700"
@@ -120,13 +141,13 @@
           </button>
         </div>
 
-        <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
+        <hr class="my-4 md:my-6 border-gray-200 dark:border-gray-800" />
 
         @if (pageLoading) {
-        <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
-        <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
-        <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
-        <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
+        <p-skeleton styleClass="mb-2" height="1.25rem" />
+        <p-skeleton styleClass="mb-2" height="1.25rem" />
+        <p-skeleton styleClass="mb-2" height="1.25rem" />
+        <p-skeleton styleClass="mb-2" height="1.25rem" />
         }@else {
         <p class="mb-6 text-gray-600">
           {{ shortDescription }}
@@ -135,6 +156,13 @@
         }
       </div>
       <div class="lg:col-span-2 lg:px-2 py-4">
+        @if (pageLoading) {
+        <p-skeleton styleClass="mb-2" height="1.25rem" />
+        <p-skeleton styleClass="mb-2" height="1.25rem" />
+        <p-skeleton styleClass="mb-2" height="1.25rem" />
+        <p-skeleton styleClass="mb-2" height="1.25rem" />
+        <p-skeleton styleClass="mb-2" height="1.25rem" />
+        } @else {
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.core.css"
@@ -145,7 +173,9 @@
         />
 
         <quill-view [content]="longDescription" format="html"></quill-view>
+        }
       </div>
+      <app-product-reviews productId="hgcjgkhhg" />
     </div>
   </div>
 </section>
