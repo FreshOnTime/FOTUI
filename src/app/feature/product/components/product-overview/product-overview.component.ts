@@ -7,11 +7,21 @@ import { Menu } from 'primeng/menu';
 import { Rating } from 'primeng/rating';
 import { Skeleton } from 'primeng/skeleton';
 import { Ripple } from 'primeng/ripple';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-product-overview',
   standalone: true,
-  imports: [Image, Skeleton, Rating, CommonModule, FormsModule, Menu, Ripple],
+  imports: [
+    Image,
+    Skeleton,
+    Rating,
+    CommonModule,
+    FormsModule,
+    Menu,
+    Ripple,
+    QuillModule,
+  ],
   templateUrl: './product-overview.component.html',
   styleUrl: './product-overview.component.scss',
 })
@@ -21,7 +31,8 @@ export class ProductOverviewComponent {
   public rating: number | undefined = 3.4;
   public price: number = 100;
   public description: string =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, molestie ipsum et, varius metus. Nullam sit amet scelerisque elit. Nullam at semper turpis';
+    '<h1><span style="color: rgb(0, 0, 0);">The&nbsp;Health&nbsp;Benefits&nbsp;of&nbsp;Tomatoes</span></h1><p><strong style="color: rgb(0, 0, 0);">Tomatoes</strong><span style="color: rgb(0, 0, 0);">&nbsp;are&nbsp;the&nbsp;major&nbsp;dietary&nbsp;source&nbsp;of&nbsp;the&nbsp;antioxidant&nbsp;lycopene,&nbsp;which&nbsp;has&nbsp;been&nbsp;linked&nbsp;to&nbsp;many&nbsp;health&nbsp;benefits,&nbsp;including&nbsp;reduced&nbsp;risk&nbsp;of&nbsp;heart&nbsp;disease&nbsp;and&nbsp;cancer.&nbsp;They&nbsp;are&nbsp;also&nbsp;a&nbsp;great&nbsp;source&nbsp;of&nbsp;vitamin&nbsp;C,&nbsp;potassium,&nbsp;folate,&nbsp;and&nbsp;vitamin&nbsp;K.</span></p><p></p><h2><span style="color: rgb(230, 0, 0);">Key&nbsp;Nutritional&nbsp;Benefits:</span></h2><p><span style="color: rgb(255, 153, 0);">Lycopene</span><span style="color: rgb(0, 0, 0);">&nbsp;-&nbsp;A&nbsp;powerful&nbsp;antioxidant&nbsp;that&nbsp;gives&nbsp;tomatoes&nbsp;their&nbsp;red&nbsp;color</span></p><ul><li><span style="color: rgb(0, 0, 0);">May&nbsp;help&nbsp;prevent&nbsp;various&nbsp;types&nbsp;of&nbsp;cancer</span></li><li><span style="color: rgb(0, 0, 0);">Supports&nbsp;heart&nbsp;health</span></li></ul><p><span style="color: rgb(0, 102, 204);">Vitamins</span></p><ul><li><span style="color: rgb(0, 0, 0);">Vitamin&nbsp;C&nbsp;-&nbsp;Supports&nbsp;immune&nbsp;system</span></li><li><span style="color: rgb(0, 0, 0);">Vitamin&nbsp;K&nbsp;-&nbsp;Essential&nbsp;for&nbsp;blood&nbsp;clotting</span></li></ul><p><span style="color: rgb(102, 61, 0);">Minerals</span></p><ul><li><span style="color: rgb(0, 0, 0);">Potassium&nbsp;-&nbsp;Helps&nbsp;regulate&nbsp;blood&nbsp;pressure</span></li><li><span style="color: rgb(0, 0, 0);">Folate&nbsp;-&nbsp;Important&nbsp;for&nbsp;cell&nbsp;growth</span></li></ul><p><span style="color: rgb(0, 0, 0);">Ways&nbsp;to&nbsp;Include&nbsp;Tomatoes&nbsp;in&nbsp;Your&nbsp;Diet:</span></p><p><span style="color: rgb(0, 0, 0);">Tomatoes&nbsp;</span><span style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 0);">can&nbsp;be&nbsp;enjoyed&nbsp;in&nbsp;many&nbsp;forms,&nbsp;including&nbsp;raw,&nbsp;cooked,&nbsp;or&nbsp;as&nbsp;part&nbsp;of&nbsp;various&nbsp;dishes&nbsp;like&nbsp;salads,&nbsp;sauces,&nbsp;and&nbsp;soups.&nbsp;Cooking&nbsp;tomatoes&nbsp;actuall</span><span style="color: rgb(0, 0, 0);">y&nbsp;increases&nbsp;the&nbsp;availability&nbsp;of&nbsp;lycopene.</span></p><p><span style="color: rgb(0, 0, 0);">Did&nbsp;you&nbsp;know?&nbsp;While&nbsp;technically&nbsp;a&nbsp;fruit,&nbsp;tomatoes&nbsp;are&nbsp;generally&nbsp;served&nbsp;and&nbsp;prepared&nbsp;as&nbsp;a&nbsp;vegetable.&nbsp;They&nbsp;were&nbsp;first&nbsp;grown&nbsp;in&nbsp;the&nbsp;Andes&nbsp;mountains&nbsp;and&nbsp;were&nbsp;brought&nbsp;to&nbsp;Europe&nbsp;by&nbsp;Spanish&nbsp;explorers.</span></p><p></p>';
+
   public reviews: number = 100;
   badges: ('fast-delivery' | 'best-price' | 'trending')[] = [];
 
@@ -75,5 +86,9 @@ export class ProductOverviewComponent {
         ],
       },
     ];
+  }
+
+  public onTextChange(event: any): void {
+    console.log(event);
   }
 }

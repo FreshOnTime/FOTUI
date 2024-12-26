@@ -1,7 +1,7 @@
 <section class="py-2 bg-white antialiased">
-  <div class="max-w-screen-2xl px-4 mx-auto 2xl:px-0">
+  <div class="max-w-screen-2xl px-5 mx-auto 2xl:px-0">
     <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
-      <div class="shrink-0 w-full max-w-md lg:max-w-lg aspect-[4/3] mx-auto">
+      <div class="shrink-0 w-full aspect-[4/3] mx-auto">
         @if (pageLoading) {
         <p-skeleton styleClass="mb-2 " height="100%" width="100%" />
         } @else {
@@ -128,10 +128,25 @@
         <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
         <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
         }@else {
-        <p class="text-gray-500 dark:text-gray-400">
-          {{ description }}
+        <p class="mb-6 text-gray-500 dark:text-gray-400">
+          Studio quality three mic array for crystal clear calls and voice
+          recordings. Six-speaker sound system for a remarkably robust and
+          high-quality audio experience. Up to 256GB of ultrafast SSD storage.
         </p>
+
         }
+      </div>
+      <div class="col-span-2 px-2 py-4">
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.core.css"
+        />
+        <link
+          href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
+          rel="stylesheet"
+        />
+
+        <quill-view [content]="description" format="html"></quill-view>
       </div>
     </div>
   </div>
