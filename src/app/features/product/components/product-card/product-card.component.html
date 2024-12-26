@@ -96,7 +96,7 @@
       >
         {{ getPrice() }}
       </p>
-      <p-menu #menu [model]="userBags" [popup]="true" />
+      <p-menu #menu [model]="userBags" appendTo="body" [popup]="true" />
       <p-button
         label="Add to Bag"
         icon="pi pi-shopping-bag"

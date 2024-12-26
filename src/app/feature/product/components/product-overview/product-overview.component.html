@@ -89,39 +89,33 @@
         </div>
 
         <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
-          <a
-            href="#"
-            title=""
-            class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-            role="button"
-          >
-            <svg
-              class="w-5 h-5 -ms-2 me-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
-              />
-            </svg>
-            Add to favorites
-          </a>
-
           <button
-            class="text-white mt-4 sm:mt-0 bg-orange-400 hover:bg-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center"
+            class="flex w-full sm:w-fit items-center cursor-pointer select-none justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            [disabled]="pageLoading"
           >
-            <i class="pi pi-shopping-bag me-2"></i>
+            <i
+              class="pi pi-heart me-2"
+              [style]="{ 'font-size': '0.875rem' }"
+            ></i>
+
+            Add to favorites
+          </button>
+          <p-menu #menu [model]="userBags" appendTo="body" [popup]="true" />
+          <button
+            class="text-white w-full sm:w-fit mt-4 disabled:bg-orange-100 sm:mt-0 cursor-pointer select-none bg-orange-400 hover:bg-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center"
+            (click)="menu.toggle($event)"
+            [disabled]="pageLoading"
+          >
+            <i
+              class="pi pi-shopping-bag me-2"
+              [style]="{ 'font-size': '0.875rem' }"
+            ></i>
 
             Add to bag
-            <i class="pi pi-chevron-down ms-2"></i>
+            <i
+              class="pi pi-chevron-down ms-2"
+              [style]="{ 'font-size': '0.875rem' }"
+            ></i>
           </button>
         </div>
 
