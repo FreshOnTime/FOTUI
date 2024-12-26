@@ -21,7 +21,7 @@
         />
         } @else {
         <h1 class="text-xl font-semibold text-gray-900 sm:text-3xl">
-          Fresh Red Tomatoes
+          {{ name }}
         </h1>
         }
         <div class="mt-4 sm:items-center sm:gap-4 sm:flex">
@@ -34,7 +34,7 @@
           />
           }@else {
           <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl">
-            $1,249.99
+            {{ getPrice() }}
           </p>
           } @if (pageLoading) {
           <p-skeleton
@@ -79,7 +79,6 @@
               ({{ rating }})
             </p>
             <a
-              href="#"
               class="text-sm font-medium leading-none text-gray-900 underline hover:no-underline dark:text-white"
             >
               {{ reviews }} Reviews
@@ -90,7 +89,7 @@
 
         <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
           <button
-            class="flex w-full sm:w-fit items-center cursor-pointer select-none justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            class="flex w-full sm:w-fit items-center disabled:bg-gray-100 disabled:text-gray-300 cursor-pointer select-none justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
             [disabled]="pageLoading"
           >
             <i
@@ -121,17 +120,16 @@
 
         <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
 
-        <p class="mb-6 text-gray-500 dark:text-gray-400">
-          Studio quality three mic array for crystal clear calls and voice
-          recordings. Six-speaker sound system for a remarkably robust and
-          high-quality audio experience. Up to 256GB of ultrafast SSD storage.
-        </p>
-
+        @if (pageLoading) {
+        <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
+        <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
+        <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
+        <p-skeleton styleClass="mb-2 text-2xl sm:text-3xl" height="1.25rem" />
+        }@else {
         <p class="text-gray-500 dark:text-gray-400">
-          Two Thunderbolt USB 4 ports and up to two USB 3 ports. Ultrafast Wi-Fi
-          6 and Bluetooth 5.0 wireless. Color matched Magic Mouse with Magic
-          Keyboard or Magic Keyboard with Touch ID.
+          {{ description }}
         </p>
+        }
       </div>
     </div>
   </div>

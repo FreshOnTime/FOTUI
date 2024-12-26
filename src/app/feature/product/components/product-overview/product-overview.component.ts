@@ -15,14 +15,41 @@ import { Skeleton } from 'primeng/skeleton';
   styleUrl: './product-overview.component.scss',
 })
 export class ProductOverviewComponent {
-  public pageLoading: boolean = true;
-  public rating: number | undefined = 4;
+  public pageLoading: boolean = false;
+  public name: string = 'Fresh Tomatoes';
+  public rating: number | undefined = 3.4;
+  public price: number = 100;
+  public description: string =
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, molestie ipsum et, varius metus. Nullam sit amet scelerisque elit. Nullam at semper turpis';
   public reviews: number = 100;
+  badges: ('fast-delivery' | 'best-price' | 'trending')[] = [];
 
   public userBags: MenuItem[] | undefined;
 
   ngOnInit() {
     this.fetchBagsMenuItems();
+    this.rating = this.getRating();
+  }
+
+  public getRating(): number | undefined {
+    if (!this.rating || isNaN(this.rating)) return undefined;
+
+    const nRating = Math.round(this.rating * 2) / 2;
+    return nRating >= 1 ? nRating : undefined;
+  }
+
+  public getPrice(): string {
+    return `LKR ${this.price.toFixed(2)}`;
+  }
+
+  public getBadgesData(): [string, string][] {
+    const badgeMap: Record<string, [string, string]> = {
+      'fast-delivery': ['Fast Delivery', 'pi pi-truck'],
+      'best-price': ['Best Price', 'pi pi-money-bill'],
+      trending: ['Trending', 'pi pi-chart-line'],
+    };
+
+    return this.badges.map((badge) => badgeMap[badge]).filter(Boolean);
   }
 
   public fetchBagsMenuItems(): void {
