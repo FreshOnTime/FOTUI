@@ -20,7 +20,7 @@ export class ProductCardComponent {
   @Input() name: string = 'Fresh Tomatoes';
   @Input() price: number = 0;
   @Input() rating: number | undefined = 0;
-  @Input() totalRatings: number = 0;
+  @Input() totalReviews: number = 0;
   @Input() discount: number = 0;
   @Input() image: string = '/placeholder.jpg';
   @Input() badges: ('fast-delivery' | 'best-price' | 'trending')[] = [];

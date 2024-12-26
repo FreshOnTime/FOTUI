@@ -8,6 +8,7 @@ import { verifyEmailPageGuardGuard } from './features/login/guards/verify-email-
 import { HomePageComponent } from './features/home/home-page/home-page.component';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { SearchResultsComponent } from './feature/search-results/search-results.component';
+import { ProductOverviewComponent } from './feature/product/components/product-overview/product-overview.component';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,10 @@ export const routes: Routes = [
   {
     path: 'search/:query',
     component: SearchResultsComponent,
+  },
+  {
+    path: 'product/:id',
+    component: ProductOverviewComponent,
   },
   {
     path: '**',
