@@ -26,6 +26,8 @@ export class ProductCardComponent {
   @Input() badges: ('fast-delivery' | 'best-price' | 'trending')[] = [];
 
   @Input() loading: boolean = false;
+  @Input() smallAddButton: boolean = false;
+  @Input() showBorders: boolean = true;
 
   constructor(private router: Router) {}
 
