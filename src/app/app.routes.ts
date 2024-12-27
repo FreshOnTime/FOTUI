@@ -7,8 +7,8 @@ import { generalGuardGuard } from './shared/guards/general-guard.guard';
 import { verifyEmailPageGuardGuard } from './features/login/guards/verify-email-page-guard.guard';
 import { HomePageComponent } from './features/home/home-page/home-page.component';
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
-import { SearchResultsComponent } from './feature/search-results/search-results.component';
-import { ProductOverviewComponent } from './feature/product/components/product-overview/product-overview.component';
+import { SearchResultsComponent } from './features/search-results/search-results.component';
+import { ProductOverviewComponent } from './features/product/product-overview/product-overview.component';
 
 export const routes: Routes = [
   {

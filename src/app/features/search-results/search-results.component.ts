@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProductCardComponent } from '../../features/product/components/product-card/product-card.component';
+import { ProductCardComponent } from '../product/product-card/product-card.component';
 import { SplitButton } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
