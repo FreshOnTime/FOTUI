@@ -9,6 +9,7 @@ import { HomePageComponent } from './features/home/home-page/home-page.component
 import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 import { SearchResultsComponent } from './features/search-results/search-results.component';
 import { ProductOverviewComponent } from './features/product/product-overview/product-overview.component';
+import { UserInfoComponent } from './features/user-info/user-info.component';
 
 export const routes: Routes = [
   {

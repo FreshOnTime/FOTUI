@@ -10,6 +10,7 @@ import { Ripple } from 'primeng/ripple';
 import { QuillModule } from 'ngx-quill';
 import { Tag } from 'primeng/tag';
 import { ProductReviewsComponent } from '../product-reviews/product-reviews.component';
+import { ProductsCarouselComponent } from '../products-carousel/products-carousel.component';
 
 @Component({
   selector: 'app-product-overview',
@@ -25,6 +26,7 @@ import { ProductReviewsComponent } from '../product-reviews/product-reviews.comp
     QuillModule,
     Tag,
     ProductReviewsComponent,
+    ProductsCarouselComponent,
   ],
   templateUrl: './product-overview.component.html',
   styleUrl: './product-overview.component.scss',
