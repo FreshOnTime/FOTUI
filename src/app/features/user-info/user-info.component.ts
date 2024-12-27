@@ -1,31 +1,38 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms'; 
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AvatarComponent } from '../../shared/components/avatar/avatar.component';
 
 @Component({
   selector: 'app-user-info',
   standalone: true,
-  imports: [FormsModule], 
+  imports: [CommonModule, FormsModule, AvatarComponent],
+
   templateUrl: './user-info.component.html',
-  styleUrl: './user-info.component.scss'
+  styleUrls: ['./user-info.component.scss']
 })
-export class UserInfoComponent {
-  // Add properties for form fields
+export class UserInfoComponent implements OnInit {
+  userPhotoUrl: string = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  userName: string = 'John Doe';
   firstName: string = '';
   lastName: string = '';
   company: string = '';
   phone: string = '';
   website: string = '';
-  visitors: number | null = null;
+  visitors: number = 0;
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
-  remember: boolean = false;
-  profilePicUrl: string = 'path/to/default/profile-pic.jpg';
   profilePic: File | null = null;
+  remember: boolean = false;
 
+  constructor() {}
+
+  ngOnInit(): void {
+    // Initialization logic here
+  }
 
   onSubmit() {
-
     console.log('Form submitted', {
       firstName: this.firstName,
       lastName: this.lastName,
@@ -38,12 +45,18 @@ export class UserInfoComponent {
       confirmPassword: this.confirmPassword,
       remember: this.remember,
     });
-    if (this.profilePic) {
+    if (this.userPhotoUrl) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.profilePicUrl = e.target.result;
+        this.userPhotoUrl = e.target.result;
       };
-      reader.readAsDataURL(this.profilePic);
+      fetch(this.userPhotoUrl)
+        .then(res => res.blob())
+        .then(blob => reader.readAsDataURL(blob));
     }
+  }
+
+  onUserClick() {
+    // Logic for handling user click on avatar
   }
 }
