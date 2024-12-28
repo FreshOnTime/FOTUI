@@ -1,29 +1,31 @@
-<div>
-  <h2 class="text-2xl font-semibold text-gray-900 dark:text-white px-4 mb-2">
-    {{ title }}
-  </h2>
-  <p-carousel
-    [value]="products"
-    [numVisible]="3"
-    [numScroll]="3"
-    [circular]="true"
-    [responsiveOptions]="responsiveOptions"
-    [autoplayInterval]="3000"
-  >
-    <ng-template let-product #item>
-      <div>
-        <app-product-card
-          [id]="product.id"
-          [name]="product.name"
-          [discount]="product.discount"
-          [price]="product.price"
-          [rating]="product.rating"
-          [totalReviews]="product.totalReviews"
-          [image]="product.image"
-          [smallAddButton]="true"
-          [showBorders]="false"
-        />
-      </div>
-    </ng-template>
-  </p-carousel>
-</div>
+<p-carousel
+  [value]="products"
+  [numVisible]="3"
+  [numScroll]="3"
+  [circular]="true"
+  [responsiveOptions]="responsiveOptions"
+  [autoplayInterval]="autoPlayInterval"
+  [showNavigators]="!isMobile"
+  [dir]=""
+>
+  <ng-template #header>
+    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white px-4 mb-4">
+      {{ title }}
+    </h2>
+  </ng-template>
+  <ng-template let-product #item>
+    <div>
+      <app-product-card
+        [id]="product.id"
+        [name]="product.name"
+        [discount]="product.discount"
+        [price]="product.price"
+        [rating]="product.rating"
+        [totalReviews]="product.totalReviews"
+        [image]="product.image"
+        [smallAddButton]="true"
+        [showBorders]="false"
+      />
+    </div>
+  </ng-template>
+</p-carousel>
