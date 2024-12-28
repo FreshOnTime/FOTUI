@@ -3,10 +3,11 @@ import { ProductCardComponent } from '../../product/product-card/product-card.co
 
 import { SplitButton } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
+import { ProductsCarouselComponent } from '../../product/products-carousel/products-carousel.component';
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [],
+  imports: [ProductsCarouselComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
