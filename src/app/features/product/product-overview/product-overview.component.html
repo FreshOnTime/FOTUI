@@ -82,7 +82,7 @@
             [step]="incrementStep"
             (onBlur)="validateAndAdjustAmount()"
             spinnerMode="horizontal"
-            [suffix]="measurementUnit"
+            [suffix]="measurementUnit === 'unit' ? '' : measurementUnit"
             [min]="minimumAmount"
             [max]="maximumAmount"
           >

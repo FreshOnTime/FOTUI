@@ -44,8 +44,8 @@ export class ProductOverviewComponent {
   public rating: number | undefined = 3.4;
   public id: string = '1';
   private baseUnitAmount: number = 1000;
-  private pricePerUnit: number = 250;
-  public measurementUnit: string = 'g';
+  private pricePerUnit: number = 25000;
+  public measurementUnit: string = 'unit';
   public minimumAmount: number = 500;
   public maximumAmount: number = 10000;
   public incrementStep: number = 50;
@@ -93,7 +93,7 @@ export class ProductOverviewComponent {
     let unit = this.measurementUnit;
 
     if (this.measurementUnit === 'unit') {
-      return amount === 1 ? '1 unit' : `${amount} units`;
+      return amount === 1 ? '1pc' : `${amount}pcs`;
     }
 
     if (unit === 'g' && amount >= 1000) {
