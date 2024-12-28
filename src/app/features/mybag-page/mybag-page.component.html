@@ -6,145 +6,86 @@
     <div class="text-center mb-8">
       <h1 class="text-4xl font-extrabold mb-4 text-gray-900 animate-bounce">Welcome to <span class="text-gray-600">Your Bag</span></h1>
       <p class="text-lg text-gray-700">Manage your orders effortlessly with our <span class="font-semibold text-gray-600">intuitive interface</span>.</p>
-      
     </div>
 
     <!-- Search Bar -->
     <div class="mb-8 flex justify-between items-center">
-      <input
-        type="text"
-        placeholder="Search carts..."
-        [(ngModel)]="searchTerm"
-        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOption" placeholder="Sort By" class="ml-4"></p-dropdown>
-    </div>
-
-    <div class="flex flex-col md:flex-row gap-8">
-      <!-- Scheduled Orders -->
-      <div class="flex-1">
-        <h2 class="text-2xl font-semibold mb-4 text-gray-800 border-b-2 border-gray-300 pb-2">
-          <i class="pi pi-calendar mr-2"></i>Scheduled Orders
-        </h2>
-        <p-scrollPanel [style]="{maxHeight: '400px'}">
-          <div class="flex flex-wrap gap-4">
-            <div
-              *ngFor="let cart of filteredScheduledCarts"
-              class="border rounded-lg p-4 cursor-pointer hover:shadow-2xl transition duration-300 bg-white w-full md:w-full"
-              (click)="selectCart(cart)"
-            >
-              <img [src]="cart.picture" alt="{{ cart.name }}" class="w-full h-32 object-cover rounded mb-4">
-              <h2 class="text-xl font-semibold text-gray-900">{{ cart.name }}</h2>
-              <p class="text-sm text-gray-600">
-                Recurring Order (Next: {{ cart.scheduleDate | date:'MMM d, yyyy' }})
-              </p>
-              <ul class="list-none mt-2">
-                <li *ngFor="let item of cart.items" class="flex items-center justify-between bg-gray-100 p-2 rounded mb-1">
-                  <span class="text-gray-700">{{ item.name }}</span>
-                  <span>{{ item.quantity }} x ${{ item.price }} = ${{ item.quantity * item.price }}</span>
-                </li>
-              </ul>
-              <div class="flex justify-end mt-4 gap-2">
-                <button pButton icon="pi pi-pencil" class="p-button-square p-button-secondary" (click)="editCart(cart)" pTooltip="Edit Cart"></button>
-                <button pButton icon="pi pi-trash" class="p-button-square p-button-secondary" (click)="confirmDeleteCart(cart)" pTooltip="Delete Cart"></button>
-              </div>
-            </div>
-          </div>
-        </p-scrollPanel>
-      </div>
-
-      <!-- One-Time Orders -->
-      <div class="flex-1">
-        <h2 class="text-2xl font-semibold mb-4 text-gray-800 border-b-2 border-gray-300 pb-2">
-          <i class="pi pi-shopping-cart mr-2"></i>One-Time Orders
-        </h2>
-        <p-scrollPanel [style]="{maxHeight: '400px'}">s
-          <div class="flex flex-wrap gap-4">
-            <div
-              *ngFor="let cart of filteredOneTimeCarts"
-              class="border rounded-lg p-4 cursor-pointer hover:shadow-2xl transition duration-300 bg-white w-full md:w-full"
-              (click)="selectCart(cart)"
-            >
-              <img [src]="cart.picture" alt="{{ cart.name }}" class="w-full h-32 object-cover rounded mb-4">
-              <h2 class="text-xl font-semibold text-gray-900">{{ cart.name }}</h2>
-              <p class="text-sm text-gray-600">One-Time Order</p>
-              <ul class="list-none mt-2">
-                <li *ngFor="let item of cart.items" class="flex items-center justify-between bg-gray-100 p-2 rounded mb-1">
-                  <span class="text-gray-700">{{ item.name }}</span>
-                  <span>{{ item.quantity }} x ${{ item.price }} = ${{ item.quantity * item.price }}</span>
-                </li>
-              </ul>
-              <div class="flex justify-end mt-4 gap-2">
-                <button pButton icon="pi pi-pencil" class="p-button-square p-button-secondary" (click)="editCart(cart)" pTooltip="Edit Cart"></button>
-                <button pButton icon="pi pi-trash" class="p-button-square p-button-secondary" (click)="confirmDeleteCart(cart)" pTooltip="Delete Cart"></button>
-              </div>
-            </div>
-          </div>
-        </p-scrollPanel>
-      </div>
-    </div>
-
-    <!-- Selected Cart Details -->
-    <div *ngIf="selectedCart" class="mt-8 p-6 border rounded-lg bg-white shadow-2xl">
-      <h2 class="text-3xl font-bold text-gray-900">{{ selectedCart.name }}</h2>
-      <ul class="list-none mt-4">
-        <li *ngFor="let item of selectedCart.items; let i = index" class="flex items-center justify-between bg-gray-100 p-2 rounded mb-1">
-          <span class="text-gray-700">{{ item.name }}</span>
-          <span>{{ item.quantity }} x ${{ item.price }} = ${{ item.quantity * item.price }}</span>
-          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-secondary p-button-sm" (click)="editItem(i)" pTooltip="Edit Item"></button>
-        </li>
-      </ul>
-      <div *ngIf="editItemIndex !== null" class="mt-4">
-        <h3 class="text-xl font-semibold mb-4">Edit Item</h3>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700">Item Name</label>
-          <input [(ngModel)]="selectedCart.items[editItemIndex].name" class="border border-gray-300 rounded p-2 w-full mb-2" />
-          <label class="block text-sm font-medium text-gray-700">Quantity</label>
-          <input type="number" [(ngModel)]="selectedCart.items[editItemIndex].quantity" class="border border-gray-300 rounded p-2 w-full mb-2" />
-        </div>
-        <div class="flex justify-end gap-2 mt-4">
-          <button pButton label="Cancel" icon="pi pi-times" class="p-button-secondary" (click)="cancelEditItem()"></button>
-          <button pButton label="Save" icon="pi pi-check" class="p-button-primary" (click)="saveItemEdits()"></button>
-          <button pButton label="Confirm" icon="pi pi-check" class="p-button-success" (click)="confirmItemEdits()"></button>
-        </div>
-      </div>
-      <button
-        class="bg-gray-500 text-white py-2 px-6 rounded-full mt-6 hover:bg-gray-600 transition duration-300"
-        (click)="selectedCart && toggleSchedule(selectedCart)"
-      >
-        {{ selectedCart.isScheduled ? 'Mark as One-Time' : 'Set as Recurring' }}
-      </button>
-      <div *ngIf="selectedCart.isScheduled && !editItemIndex" class="mt-4">
-        <label for="scheduleDate" class="block text-sm font-medium text-gray-700">
-          Schedule Date:
-        </label>
+      <div class="relative w-full">
+        <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
         <input
-          id="scheduleDate"
-          type="date"
-          [(ngModel)]="selectedCart.scheduleDate"
-          class="border border-gray-300 rounded p-2 mt-1 w-full"
+          type="text"
+          placeholder="Search carts..."
+          [(ngModel)]="searchTerm"
+          class="w-full p-2 pl-10 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
+      <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOption" placeholder="Sort By" class="ml-4"></p-dropdown>
+      <p-dropdown [options]="filterOptions" [(ngModel)]="selectedFilterOption" placeholder="Filter By" class="ml-4"></p-dropdown>
     </div>
 
+    <!-- Combined Orders -->
+    <div class="flex-1">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800 border-b-2 border-gray-300 pb-2">
+        <i class="pi pi-shopping-cart mr-2"></i>All Orders
+      </h2>
+      <p-scrollPanel [style]="{maxHeight: '400px'}">
+        <p-dataview [value]="filteredCarts">
+          <ng-template #list let-items>
+            <div class="grid grid-cols-12 gap-6 grid-nogutter">
+              <div class="col-span-12" *ngFor="let cart of items; let first = first" class="col-span-12">
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center p-6 gap-4 cursor-pointer hover:shadow-lg transition duration-300 bg-white rounded-lg"
+                  [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }"
+                  (click)="selectCart(cart)"
+                >
+                  <div class="md:w-40 relative">
+                    <img
+                      class="block xl:block mx-auto rounded-border w-full"
+                      [src]="cart.picture"
+                      [alt]="cart.name"
+                    />
+                  </div>
+                  <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                    <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                      <div>
+                        <span class="font-medium text-secondary text-sm">{{ cart.isScheduled ? 'Scheduled Order' : 'One-Time Order' }}</span>
+                        <div class="text-lg font-medium text-surface-900 dark:text-surface-0 mt-2">{{ cart.name }}</div>
+                        <ul class="list-none mt-2">
+                          <li *ngFor="let item of cart.items" class="flex items-center justify-between bg-gray-100 p-2 rounded mb-1">
+                            <span class="text-gray-700">{{ item.name }}</span>
+                            <span>{{ item.quantity }} x ${{ item.price }} = ${{ item.quantity * item.price }}</span>
+                          </li>
+                        </ul>
+                        <div *ngIf="cart.isScheduled" class="mt-2 text-sm text-gray-600">
+                          Next Order Date: {{ cart.scheduleDate | date:'MMM d, yyyy' }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-col md:items-end gap-8">
+                      <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{
+                        'Total: $' + getTotalCartPrice(cart)
+                      }}</span>
+                      <button pButton type="button" label="View Bag" icon="pi pi-shopping-cart" class="p-button-black" (click)="selectCart(cart)"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataview>
+      </p-scrollPanel>
+    </div>
+
+  
     <!-- Cart Summary -->
     <div class="mt-8 p-6 border rounded-lg bg-white shadow-2xl">
-      <h2 class="text-2xl font-bold text-gray-900">Scheduled Cart Summary</h2>
+      <h2 class="text-2xl font-bold text-gray-900">Cart Summary</h2>
       <div class="mt-4">
-        <p class="text-lg text-gray-700">Total Items: {{ getTotalScheduledItems() }}</p>
-        <p class="text-lg text-gray-700">Total Price: ${{ getTotalScheduledPrice() }}</p>
+        <p class="text-lg text-gray-700">Total Items: {{ getTotalItems() }}</p>
+        <p class="text-lg text-gray-700">Total Price: ${{ getTotalPrice() }}</p>
       </div>
     </div>
 
-    <div class="mt-8 p-6 border rounded-lg bg-white shadow-2xl">
-      <h2 class="text-2xl font-bold text-gray-900">One-Time Cart Summary</h2>
-      <div class="mt-4">
-        <p class="text-lg text-gray-700">Total Items: {{ getTotalOneTimeItems() }}</p>
-        <p class="text-lg text-gray-700">Total Price: ${{ getTotalOneTimePrice() }}</p>
-      </div>
-    </div>
-
- 
     <!-- Delete Confirmation Modal -->
     <p-dialog header="Confirm Deletion" [(visible)]="displayDeleteModal" [modal]="true" [closable]="false">
       <p>Are you sure you want to delete this cart?</p>

@@ -7,6 +7,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastModule } from 'primeng/toast';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { DataViewModule } from 'primeng/dataview';
 import { MessageService } from 'primeng/api';
 
 interface Cart {
@@ -27,7 +28,7 @@ interface Item {
   selector: 'app-mybag-page',
   templateUrl: './mybag-page.component.html',
   styleUrls: [],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, ScrollPanelModule, ButtonModule, DialogModule, DropdownModule, ToastModule, ProgressBarModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, ScrollPanelModule, ButtonModule, DialogModule, DropdownModule, ToastModule, ProgressBarModule, DataViewModule],
   providers: [MessageService],
   standalone: true
 })
@@ -47,6 +48,12 @@ export class MyBagPageComponent implements OnInit {
     { label: 'Date', value: 'date' }
   ];
   selectedSortOption: string = '';
+  filterOptions = [
+    { label: 'All', value: 'all' },
+    { label: 'Scheduled', value: 'scheduled' },
+    { label: 'One-Time', value: 'one-time' }
+  ];
+  selectedFilterOption: string = 'all';
   wishlist: Item[] = [
     { name: 'Wishlist Item 1', price: 15, picture: 'assets/wishlist1.jpg' },
     { name: 'Wishlist Item 2', price: 25, picture: 'assets/wishlist2.jpg' }
@@ -75,6 +82,23 @@ export class MyBagPageComponent implements OnInit {
     return this.oneTimeCarts.filter(cart => cart.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
   }
 
+  get filteredCarts(): Cart[] {
+    return this.carts.filter(cart => {
+      const matchesSearchTerm = cart.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchesFilter = this.selectedFilterOption === 'all' ||
+        (this.selectedFilterOption === 'scheduled' && cart.isScheduled) ||
+        (this.selectedFilterOption === 'one-time' && !cart.isScheduled);
+      return matchesSearchTerm && matchesFilter;
+    }).sort((a, b) => {
+      if (this.selectedSortOption === 'name') {
+        return a.name.localeCompare(b.name);
+      } else if (this.selectedSortOption === 'date') {
+        return (a.scheduleDate?.getTime() || 0) - (b.scheduleDate?.getTime() || 0);
+      }
+      return 0;
+    });
+  }
+
   ngOnInit(): void {
     // Example carts for demonstration
     this.carts = [
@@ -82,7 +106,9 @@ export class MyBagPageComponent implements OnInit {
         name: 'Groceries',
         items: [
           { name: 'Apples', quantity: 5, price: 1 },
-          { name: 'Bread', quantity: 2, price: 2 }
+          { name: 'Bread', quantity: 2, price: 2 },
+          { name: 'Milk', quantity: 1, price: 3 },
+          { name: 'Eggs', quantity: 12, price: 0.2 }
         ],
         isScheduled: true,
         scheduleDate: new Date('2024-12-30'),
@@ -92,7 +118,9 @@ export class MyBagPageComponent implements OnInit {
         name: 'Party Supplies',
         items: [
           { name: 'Cups', quantity: 20, price: 0.5 },
-          { name: 'Plates', quantity: 30, price: 0.3 }
+          { name: 'Plates', quantity: 30, price: 0.3 },
+          { name: 'Napkins', quantity: 50, price: 0.1 },
+          { name: 'Balloons', quantity: 10, price: 0.5 }
         ],
         isScheduled: false,
         picture: 'assets/party_supplies.jpg'
@@ -101,7 +129,9 @@ export class MyBagPageComponent implements OnInit {
         name: 'Office Supplies',
         items: [
           { name: 'Pens', quantity: 10, price: 1 },
-          { name: 'Notebooks', quantity: 5, price: 2 }
+          { name: 'Notebooks', quantity: 5, price: 2 },
+          { name: 'Stapler', quantity: 1, price: 5 },
+          { name: 'Paper Clips', quantity: 100, price: 0.01 }
         ],
         isScheduled: true,
         scheduleDate: new Date('2024-11-15'),
@@ -111,10 +141,33 @@ export class MyBagPageComponent implements OnInit {
         name: 'Electronics',
         items: [
           { name: 'USB Cable', quantity: 3, price: 5 },
-          { name: 'Mouse', quantity: 1, price: 10 }
+          { name: 'Mouse', quantity: 1, price: 10 },
+          { name: 'Keyboard', quantity: 1, price: 20 },
+          { name: 'Monitor', quantity: 1, price: 100 }
         ],
         isScheduled: false,
         picture: 'assets/electronics.jpg'
+      },
+      {
+        name: 'Books',
+        items: [
+          { name: 'Fiction Book', quantity: 2, price: 15 },
+          { name: 'Non-Fiction Book', quantity: 1, price: 20 },
+          { name: 'Magazine', quantity: 5, price: 5 }
+        ],
+        isScheduled: true,
+        scheduleDate: new Date('2024-10-10'),
+        picture: 'assets/books.jpg'
+      },
+      {
+        name: 'Clothing',
+        items: [
+          { name: 'T-Shirt', quantity: 3, price: 10 },
+          { name: 'Jeans', quantity: 2, price: 30 },
+          { name: 'Jacket', quantity: 1, price: 50 }
+        ],
+        isScheduled: false,
+        picture: 'assets/clothing.jpg'
       }
     ];
   }
@@ -152,9 +205,6 @@ export class MyBagPageComponent implements OnInit {
     if (this.selectedCart && this.editItemIndex !== null) {
       this.messageService.add({ severity: 'success', summary: 'Item Confirmed', detail: 'Item edits have been confirmed.' });
       this.editItemIndex = null;
-      if (this.selectedCart.isScheduled) {
-        this.selectedCart.scheduleDate = undefined;
-      }
     }
   }
 
@@ -245,5 +295,9 @@ export class MyBagPageComponent implements OnInit {
     } else {
       this.messageService.add({ severity: 'error', summary: 'Insufficient Points', detail: 'You do not have enough loyalty points to redeem.' });
     }
+  }
+
+  getTotalCartPrice(cart: Cart): number {
+    return cart.items.reduce((total, item) => total + (item.quantity * item.price), 0);
   }
 }
