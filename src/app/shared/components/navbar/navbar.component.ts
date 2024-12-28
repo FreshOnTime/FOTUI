@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { Toolbar } from 'primeng/toolbar';
 import { AvatarModule } from 'primeng/avatar';
 import { SharedModule } from 'primeng/api';
@@ -10,6 +10,9 @@ import { AvatarComponent } from '../avatar/avatar.component';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { User } from '@angular/fire/auth';
+import { debounceTime, Subject } from 'rxjs';
+import { NavbarQuickCategory } from '../../../models/navbar-quick-category-model';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -34,13 +37,56 @@ export class NavbarComponent {
     'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png';
 
   public user: User | null = null;
+  public bottomNavItems: NavbarQuickCategory[] = [
+    {
+      image: '/category-images/rice.png',
+      title: 'Rice & Grains',
+    },
+    {
+      image: '/category-images/pumpkin.png',
+      title: 'Fresh Produce',
+    },
+    {
+      image: '/category-images/meat.png',
+      title: 'Meat & Seafood',
+    },
+    {
+      image: '/category-images/milk.png',
+      title: 'Dairy & Eggs',
+    },
+    {
+      image: '/category-images/bakery.png',
+      title: 'Bakery',
+    },
+    {
+      image: '/category-images/ginger.png',
+      title: 'Spices & Seasonings',
+    },
+    {
+      image: '/category-images/home.png',
+      title: 'Household',
+    },
+  ];
 
-  constructor(private authService: AuthService, private router: Router) {
+  private lastScrollTop = 0;
+  private scrollThreshold = 150;
+  private scrollSubject = new Subject<number>();
+  isScrolled = false;
+  hideBottom = false;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private elementRef: ElementRef
+  ) {
     this.updateIsMobile();
 
     this.authService.user$.subscribe((user) => {
       this.user = user as User;
-      // console.log('User', this.user);
+    });
+
+    this.scrollSubject.pipe(debounceTime(10)).subscribe((st) => {
+      this.handleScroll(st);
     });
   }
 
@@ -92,5 +138,25 @@ export class NavbarComponent {
 
   private updateIsMobile(): void {
     this.isMobile = window.innerWidth < 768;
+  }
+
+  // Bottom navbar hide on scroll
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    const st = window.pageYOffset || document.documentElement.scrollTop;
+    this.scrollSubject.next(st);
+  }
+
+  private handleScroll(st: number) {
+    this.isScrolled = st > 0.1;
+
+    if (Math.abs(st - this.lastScrollTop) > this.scrollThreshold) {
+      if (st > this.lastScrollTop && st > 100) {
+        this.hideBottom = true;
+      } else if (st < this.lastScrollTop) {
+        this.hideBottom = false;
+      }
+      this.lastScrollTop = st <= 0 ? 0 : st;
+    }
   }
 }

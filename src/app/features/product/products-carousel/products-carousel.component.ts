@@ -24,7 +24,7 @@ export class ProductsCarouselComponent {
   ngOnInit() {
     this.fetchProducts();
 
-    this.autoPlayInterval = Math.floor(Math.random() * 5000) + 1000;
+    this.autoPlayInterval = Math.floor(Math.random() * 5000) + 5000;
 
     this.responsiveOptions = [
       {
