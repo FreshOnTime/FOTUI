@@ -24,8 +24,20 @@
           {{ name }}
         </h1>
         }
-        <div class="mt-4 sm:items-center sm:gap-4 sm:flex">
+        <div class="mt-4">
           @if (pageLoading) {
+          <p-skeleton
+            styleClass="mb-2 text-2xl sm:text-3xl"
+            height="1.25rem"
+            ngClass="w-full"
+            [style]="{ width: '55%' }"
+          />
+          } @else if (discount > 0) {
+
+          <div class="flex items-center line-through text-red-500 font-medium">
+            {{ getPriceWithoutDiscount() }}
+          </div>
+          } @if (pageLoading) {
           <p-skeleton
             styleClass="mb-2 text-2xl  sm:text-3xl"
             height="1.2em"
@@ -33,58 +45,11 @@
             [style]="{ width: '70%' }"
           />
           }@else {
-          <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl">
+          <div class="text-2xl font-extrabold text-gray-900 sm:text-3xl">
             {{ getPrice() }}
-          </p>
-          } @if (pageLoading) {
-          <p-skeleton
-            styleClass="mb-2 text-2xl sm:text-3xl"
-            height="1.25rem"
-            ngClass="w-full"
-            [style]="{ width: '55%' }"
-          />
-          } @else if (reviews > 4) {
-
-          <div class="flex items-center gap-2 mt-2 sm:mt-0">
-            <p-rating [readonly]="true" [(ngModel)]="rating">
-              <ng-template #onicon>
-                <svg
-                  class="h-4 w-4 text-yellow-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z"
-                  />
-                </svg>
-              </ng-template>
-              <ng-template #officon>
-                <svg
-                  class="h-4 w-4 text-gray-300"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z"
-                  />
-                </svg>
-              </ng-template>
-            </p-rating>
-
-            <p
-              class="text-sm font-medium leading-none text-gray-500 dark:text-gray-400"
-            >
-              ({{ rating }})
-            </p>
-            <a
-              class="text-sm font-medium leading-none text-gray-900 underline hover:no-underline dark:text-white"
-            >
-              {{ reviews }} Reviews
-            </a>
+            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              per {{ getPerUnit() }}
+            </span>
           </div>
           }
         </div>
@@ -108,6 +73,42 @@
         </div>
         }
 
+        <div class="flex">
+          <p-inputnumber
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            inputId="horizontal"
+            [formControl]="buyingAmountControl"
+            [step]="incrementStep"
+            (onBlur)="validateAndAdjustAmount()"
+            spinnerMode="horizontal"
+            [suffix]="measurementUnit"
+            [min]="minimumAmount"
+            [max]="maximumAmount"
+          >
+            <ng-template #incrementbuttonicon>
+              <span class="pi pi-plus"></span>
+            </ng-template>
+            <ng-template #decrementbuttonicon>
+              <span class="pi pi-minus"></span>
+            </ng-template>
+          </p-inputnumber>
+        </div>
+        <div
+          *ngIf="buyingAmountControl.errors"
+          class="text-red-500 text-sm mt-1"
+        >
+          <span *ngIf="buyingAmountControl.errors['min']">
+            Please enter at least {{ minimumAmount }}{{ measurementUnit }}.
+          </span>
+          <span *ngIf="buyingAmountControl.errors['max']">
+            You can select up to {{ maximumAmount }}{{ measurementUnit }} only.
+          </span>
+          <span *ngIf="buyingAmountControl.errors['step']">
+            The amount must be in increments of {{ incrementStep
+            }}{{ measurementUnit }}.
+          </span>
+        </div>
         <div class="mt-4 sm:gap-4 sm:items-center sm:flex sm:mt-6">
           <button
             pRipple
@@ -118,21 +119,19 @@
               class="pi pi-heart me-2"
               [style]="{ 'font-size': '0.875rem' }"
             ></i>
-
             Add to favorites
           </button>
           <p-menu #menu [model]="userBags" appendTo="body" [popup]="true" />
           <button
             class="text-white w-full sm:w-fit mt-4 disabled:bg-orange-100 sm:mt-0 cursor-pointer select-none bg-orange-400 hover:bg-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 flex items-center justify-center"
             (click)="menu.toggle($event)"
-            [disabled]="pageLoading"
+            [disabled]="pageLoading || buyingAmountControl.errors"
             pRipple
           >
             <i
               class="pi pi-shopping-bag me-2"
               [style]="{ 'font-size': '0.875rem' }"
             ></i>
-
             Add to bag
             <i
               class="pi pi-chevron-down ms-2"
@@ -179,7 +178,10 @@
         class="lg:col-span-2 lg:px-2 mt-0"
         title="You may also like"
       />
-
+      <div
+        id="shop-now"
+        class="w-full flex flex-wrap gap-4 px-4 py-8 mb-2 justify-evenly"
+      ></div>
       <app-product-reviews
         productId="hgcjgkhhg"
         class="lg:col-span-2 lg:px-2 mt-0"
