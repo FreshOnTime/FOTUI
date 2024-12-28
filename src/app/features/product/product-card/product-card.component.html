@@ -34,6 +34,7 @@
     <a
       href="#"
       class="text-lg font-semibold leading-tight text-gray-900 hover:underline"
+      class="text-lg font-semibold leading-tight text-gray-900 hover:underline"
     >
       {{ name }}
     </a>
@@ -68,9 +69,11 @@
         </ng-template>
       </p-rating>
 
+      <p class="text-sm font-medium text-gray-900"></p>
       <p class="text-sm font-medium text-gray-900">
         {{ rating }}
       </p>
+      <p class="text-sm font-medium text-gray-500">({{ totalReviews }})</p>
       <p class="text-sm font-medium text-gray-500">({{ totalReviews }})</p>
     </div>
     } @if (getBadgesData()) {
@@ -78,6 +81,7 @@
       @for (badge of getBadgesData(); track badge[0]) {
       <li class="flex items-center gap-2">
         <i class="  {{ badge[1] }} text-gray-500"></i>
+        <p class="text-sm font-medium text-gray-500"></p>
         <p class="text-sm font-medium text-gray-500">
           {{ badge[0] }}
         </p>
@@ -96,6 +100,8 @@
       </p>
       <p-menu #menu [model]="userBags" appendTo="body" [popup]="true" />
       <p-button
+        label="{{ !smallAddButton ? 'Add to Bag' : '' }}"
+        icon="pi {{ smallAddButton ? 'pi-plus' : 'pi-shopping-bag' }}"
         label="{{ !smallAddButton ? 'Add to Bag' : '' }}"
         icon="pi {{ smallAddButton ? 'pi-plus' : 'pi-shopping-bag' }}"
         (onClick)="menu.toggle($event)"

@@ -1,0 +1,106 @@
+<div class="relative max-w-4xl mx-auto">
+  <h1 class="text-4xl font-bold text-center text-black-600 mb-6">Find Your Freshness</h1>
+  <div class="relative">
+    <div class="search-container">
+      <input
+        type="text"
+        [formControl]="searchControl"
+        placeholder="Search for products..."
+        class="w-full p-3 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sticky top-0 left-0 right-0 max-w-full sm:max-w-4xl mx-auto mt-6 bg-white z-50"
+        (focus)="showSuggestions = true"
+        (blur)="hideSuggestions()"
+      />
+    </div>
+    <svg
+      class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+      />
+    </svg>
+  </div>
+  <ul
+    *ngIf="showSuggestions && suggestions.length > 0"
+    class="absolute left-0 right-0 bg-white border border-gray-300 rounded-md shadow-md mt-1 z-10"
+  >
+    <li
+      *ngFor="let suggestion of suggestions"
+      class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+    >
+      {{ suggestion }}
+    </li>
+  </ul>
+</div>
+
+<div class="max-w-4xl mx-auto mt-24">
+  <h2 class="text-2xl font-semibold mb-4">Suggested Products</h2>
+  <div class="flex flex-wrap gap-4">
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Product 1</h3>
+      <p class="text-gray-600">Description of product 1.</p>
+    </div>
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Product 2</h3>
+      <p class="text-gray-600">Description of product 2.</p>
+    </div>
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Product 3</h3>
+      <p class="text-gray-600">Description of product 3.</p>
+    </div>
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Product 4</h3>
+      <p class="text-gray-600">Description of product 4.</p>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-4xl mx-auto mt-12">
+  <h2 class="text-2xl font-semibold mb-4">Previous Search Results</h2>
+  <div class="flex flex-wrap gap-4">
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Previous Search 1</h3>
+      <p class="text-gray-600">Details of previous search 1.</p>
+    </div>
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Previous Search 2</h3>
+      <p class="text-gray-600">Details of previous search 2.</p>
+    </div>
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Previous Search 3</h3>
+      <p class="text-gray-600">Details of previous search 3.</p>
+    </div>
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Previous Search 4</h3>
+      <p class="text-gray-600">Details of previous search 4.</p>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-4xl mx-auto mt-12">
+  <h2 class="text-2xl font-semibold mb-4">Trending Products</h2>
+  <div class="flex flex-wrap gap-4">
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Trending Product 1</h3>
+      <p class="text-gray-600">Description of trending product 1.</p>
+    </div>
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Trending Product 2</h3>
+      <p class="text-gray-600">Description of trending product 2.</p>
+    </div>
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Trending Product 3</h3>
+      <p class="text-gray-600">Description of trending product 3.</p>
+    </div>
+    <div class="border border-gray-300 rounded-md p-4 shadow-md flex-1 hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-lg font-bold">Trending Product 4</h3>
+      <p class="text-gray-600">Description of trending product 4.</p>
+    </div>
+  </div>
+</div>
