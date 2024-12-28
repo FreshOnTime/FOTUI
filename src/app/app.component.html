@@ -1,6 +1,4 @@
-<body
-  class="h-screen w-full overflow-auto scroll-smooth relative flex flex-col"
->
+<body class="w-full scroll-smooth relative flex flex-col">
   @if (showNavbar) {
   <app-navbar class="sticky top-0 z-50"></app-navbar>
   }
@@ -11,9 +9,9 @@
   <app-footer class="mt-auto"></app-footer>
   }
 
-  <p-scrolltop
+  <!-- <p-scrolltop
     target="parent"
-    class="sticky right-4 bottom-4"
+    class="absolute right-4 bottom-4"
     [threshold]="50"
     [buttonProps]="{
     severity: 'contrast',
@@ -21,5 +19,5 @@
     rounded: true,
 
   }"
-  />
+  /> -->
 </body>
