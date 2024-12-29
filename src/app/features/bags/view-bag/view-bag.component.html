@@ -1,56 +1,63 @@
 <section class="bg-white py-6 antialiased dark:bg-gray-900">
   <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
-    @if (!pageLoading) {
-    <h2
-      class="text-xl font-semibold mb-4 text-gray-900 dark:text-white sm:text-2xl"
-    >
-      {{ bag?.name }}
-    </h2>
-    } @else {
-    <p-skeleton styleClass="mb-2" height="2.2em" width="100px" />
-    }
-
     <div class="grid gap-2 grid-cols-12">
       <div class="col-span-full md:col-span-8">
         @if (!pageLoading) {
-        <p-table [value]="bag!.items">
+        <p-table
+          [value]="bag!.items"
+          styleClass="p-datatable-gridlines"
+          size="small"
+          selectionMode="single"
+          [(selection)]="selectedProduct"
+          dataKey="id"
+          #dt
+          [rowHover]="true"
+        >
+          <ng-template #caption>
+            <div class="flex flex-wrap h-10">
+              <h2
+                class="text-xl flex-grow font-semibold text-gray-900 dark:text-white sm:text-2xl"
+              >
+                {{ bag?.name }}
+              </h2>
+
+              @if (selectedProduct) {
+              <p-button
+                label="{{ isMobile ? '' : 'Edit' }}"
+                severity="contrast"
+                rounded="{{ isMobile ? 'circle' : '' }}"
+                text
+                icon="pi pi-pencil"
+                size="small"
+              />
+
+              <p-button
+                label="{{ isMobile ? '' : 'Remove' }}"
+                severity="danger"
+                rounded="{{ isMobile ? 'circle' : '' }}"
+                text
+                icon="pi pi-trash"
+                size="small"
+                (onClick)="onRemoveItem(selectedProduct)"
+              />
+              }
+            </div>
+          </ng-template>
           <ng-template #header>
             <tr>
+              <th style="width: 3rem"></th>
               <th>Name</th>
               <th>Qty</th>
               <th>Price(LKR)</th>
             </tr>
           </ng-template>
           <ng-template #body let-item>
-            <tr>
-              <td>{{ item.name }}</td>
+            <tr [pSelectableRow]="item">
               <td>
-                <div class="flex text-gray-500 font-semibold h-10">
-                  <button
-                    pRipple
-                    class="border w-10 rounded-l"
-                    (mousedown)="decrementBuyingQuantity(item)"
-                    (mouseup)="stopPressAndHold()"
-                    (mouseleave)="stopPressAndHold()"
-                  >
-                    <i class="pi pi-minus"></i>
-                  </button>
-                  <p
-                    class="flex items-center select-none justify-center w-20 border-t border-b"
-                  >
-                    {{ item.buyingQuantity }}{{ item.measurementType }}
-                  </p>
-                  <button
-                    pRipple
-                    class="border w-10 rounded-r"
-                    (mousedown)="incrementBuyingQuantity(item)"
-                    (mouseup)="stopPressAndHold()"
-                    (mouseleave)="stopPressAndHold()"
-                  >
-                    <i class="pi pi-plus"></i>
-                  </button>
-                </div>
+                <p-tableRadioButton [value]="item"></p-tableRadioButton>
               </td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.buyingQuantity }}{{ item.measurementType }}</td>
               <td>
                 {{ getItemPrice(item) }}
 
@@ -64,28 +71,28 @@
           </ng-template>
           <ng-template #footer>
             <tr>
-              <td colspan="2" class="text-right p-3 pb-0">Sub Total</td>
+              <td colspan="3" class="text-right p-3 pb-0">Sub Total</td>
 
               <td class="p-3 pb-0">
                 {{ getSubTotal(bag!) }}
               </td>
             </tr>
             <tr>
-              <td colspan="2" class="p-3 pb-0">
+              <td colspan="3" class="p-3 pb-0">
                 <span class="text-right text-green-600">Savings</span>
               </td>
 
               <td class="p-3 pb-0">-{{ getTotalSavings(bag!) }}</td>
             </tr>
             <tr>
-              <td colspan="2" class="text-right p-3 pb-0">Service Fee</td>
+              <td colspan="3" class="text-right p-3 pb-0">Service Fee</td>
 
               <td class="p-3 pb-0">
                 {{ getServiceFee(bag!) }}
               </td>
             </tr>
             <tr>
-              <td colspan="2" class="text-right font-medium p-3 pb-0">
+              <td colspan="3" class="text-right font-medium p-3 pb-0">
                 Net Total
               </td>
 

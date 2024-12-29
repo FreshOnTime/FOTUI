@@ -4,20 +4,13 @@
   }
 
   <router-outlet class="flex-grow-0" />
-
+  <p-toast
+    [breakpoints]="{
+      '768px': { width: '100%', right: '0', left: '0', padding: '4px' }
+    }"
+  />
+  <p-confirmdialog />
   @if(showFooter){
   <app-footer class="mt-auto"></app-footer>
   }
-
-  <!-- <p-scrolltop
-    target="parent"
-    class="absolute right-4 bottom-4"
-    [threshold]="50"
-    [buttonProps]="{
-    severity: 'contrast',
-    raised: true,
-    rounded: true,
-
-  }"
-  /> -->
 </body>

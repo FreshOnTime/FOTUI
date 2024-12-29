@@ -1,5 +1,6 @@
 export interface BagProductModel {
   id: string;
+  productID: string;
   name: string;
   baseUnitQuantity: number;
   pricePerUnit: number;
