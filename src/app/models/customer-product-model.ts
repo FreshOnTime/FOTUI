@@ -1,4 +1,4 @@
-export interface BagProductModel {
+export interface CustomerProduct {
   id: string;
   productID: string;
   name: string;

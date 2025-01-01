@@ -1,15 +1,8 @@
-import { BagProductModel } from './bag-product-model';
+import { CustomerProduct } from './customer-product-model';
 import { RecurringOrderLogic } from './recurring-order-logic';
 
-export interface BagModel {
+export interface Bag {
   id: string;
   name: string;
-  items: BagProductModel[];
-  isRecuring: boolean;
-  recurringOrderLogics?: RecurringOrderLogic[];
-  nextOrderDate?: Date;
-  ordersDelivered?: number;
-  ordersRemaining?: number;
-  ordersCancelled?: number;
-  ordersReturned?: number;
+  items: CustomerProduct[];
 }

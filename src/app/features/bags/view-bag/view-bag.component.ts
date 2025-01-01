@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Host, HostListener } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { BagModel } from '../../../models/bag-model';
-import { BagProductModel } from '../../../models/bag-product-model';
+import { Bag } from '../../../models/bag-model';
+import { CustomerProduct } from '../../../models/customer-product-model';
 import { RippleModule } from 'primeng/ripple';
 import { interval, Subscription } from 'rxjs';
 import { Skeleton } from 'primeng/skeleton';
@@ -10,6 +10,9 @@ import { InputIconModule } from 'primeng/inputicon';
 import { ButtonModule } from 'primeng/button';
 import { ScreenService } from '../../../shared/services/screen/screen.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { CardModule } from 'primeng/card';
+import { CurrencyPipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-view-bag',
@@ -21,6 +24,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     IconFieldModule,
     InputIconModule,
     ButtonModule,
+    CardModule,
+    CurrencyPipe,
+    RouterModule,
   ],
 
   templateUrl: './view-bag.component.html',
@@ -30,9 +36,9 @@ export class ViewBagComponent {
   public pageLoading: boolean = false;
   isMobile: boolean = false;
 
-  public bag: BagModel | null = null;
+  public bag: Bag | null = null;
 
-  selectedProduct!: BagProductModel | null;
+  selectedItems!: CustomerProduct[] | null;
 
   constructor(
     public screenService: ScreenService,
@@ -54,7 +60,7 @@ export class ViewBagComponent {
   private pressHoldSubscription: Subscription | null = null;
 
   private simulatingFetchFromServer(): Promise<{
-    bag: BagModel;
+    bag: Bag;
     serviceFee: number;
   }> {
     return new Promise((resolve) => {
@@ -118,7 +124,6 @@ export class ViewBagComponent {
                 discountPercentage: 10,
               },
             ],
-            isRecuring: false,
           },
         });
       }, 1000);
@@ -126,7 +131,7 @@ export class ViewBagComponent {
   }
 
   public getItemPrice(
-    item: BagProductModel,
+    item: CustomerProduct,
     withDiscount: boolean = true
   ): number {
     const discount = item.discountPercentage || 0;
@@ -138,7 +143,7 @@ export class ViewBagComponent {
     return price - (price * discount) / 100;
   }
 
-  public getSubTotal(item: BagModel): number {
+  public getOriginalPrice(item: Bag): number {
     let subTotal = 0;
 
     for (const item of this.bag!.items) {
@@ -148,17 +153,17 @@ export class ViewBagComponent {
     return Math.round(subTotal * 100) / 100;
   }
 
-  public getNetTotal(item: BagModel): number {
+  public getNetTotal(item: Bag): number {
     return (
-      this.getSubTotal(item) -
+      this.getOriginalPrice(item) -
       this.getTotalSavings(item) +
       this.getServiceFee(item)
     );
   }
 
-  public getServiceFee(item: BagModel): number {
+  public getServiceFee(item: Bag): number {
     let serviceFee =
-      (this.getSubTotal(item) - this.getTotalSavings(item)) * 0.3;
+      (this.getOriginalPrice(item) - this.getTotalSavings(item)) * 0.3;
 
     if (serviceFee < 500) {
       return 500;
@@ -167,7 +172,7 @@ export class ViewBagComponent {
     return Math.round(serviceFee * 100) / 100;
   }
 
-  public getTotalSavings(item: BagModel): number {
+  public getTotalSavings(item: Bag): number {
     let savings = 0;
 
     for (const item of this.bag!.items) {
@@ -179,7 +184,7 @@ export class ViewBagComponent {
 
   ///////// Remove Item //////////
 
-  public onRemoveItem(item: BagProductModel): void {
+  public onRemoveItem(item: CustomerProduct): void {
     this.confirmationService.confirm({
       message: 'Are you sure you want to remove this item from your bag?',
       header: 'Remove Item',
@@ -189,16 +194,18 @@ export class ViewBagComponent {
         label: 'Cancel',
         severity: 'secondary',
         outlined: true,
+        size: 'small',
       },
       acceptButtonProps: {
-        label: 'Delete',
+        label: 'Remove',
         severity: 'danger',
+        size: 'small',
       },
 
       accept: () => {
         try {
           this.bag!.items = this.bag!.items.filter((i) => i.id !== item.id);
-          this.selectedProduct = null;
+          this.selectedItems = null;
 
           this.messageService.add({
             severity: 'success',
@@ -214,12 +221,68 @@ export class ViewBagComponent {
         }
       },
       reject: () => {
-        this.selectedProduct = null;
+        this.selectedItems = null;
       },
     });
   }
 
-  public incrementBuyingQuantity(item: BagProductModel): void {
+  public onRemoveItems(items: CustomerProduct[]): void {
+    if (!items || items.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'No Items Selected',
+        detail: 'Please select items to remove from your bag.',
+      });
+      return;
+    }
+
+    const itemNames = items.map((item) => item.name).join(', ');
+
+    this.confirmationService.confirm({
+      message: `Are you sure you want to remove the selected items (${itemNames}) from your bag?`,
+      header: 'Remove Items',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: 'Remove',
+        severity: 'danger',
+        size: 'small',
+      },
+      accept: () => {
+        try {
+          // Remove selected items from the bag
+          this.bag!.items = this.bag!.items.filter(
+            (bagItem) =>
+              !items.some((selectedItem) => selectedItem.id === bagItem.id)
+          );
+          this.selectedItems = null;
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Items Removed',
+            detail: `${items.length} item(s) have been removed from your bag.`,
+          });
+        } catch (error) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'An error occurred while removing the items.',
+          });
+        }
+      },
+      reject: () => {
+        this.selectedItems = null;
+      },
+    });
+  }
+
+  public incrementBuyingQuantity(item: CustomerProduct): void {
     this.pressHoldSubscription = interval(80).subscribe(() => {
       if (item.buyingQuantity + item.incrementStep > item.maxQuantity) {
         return;
@@ -228,7 +291,7 @@ export class ViewBagComponent {
     });
   }
 
-  public decrementBuyingQuantity(item: BagProductModel): void {
+  public decrementBuyingQuantity(item: CustomerProduct): void {
     this.pressHoldSubscription = interval(80).subscribe(() => {
       if (item.buyingQuantity - item.incrementStep < item.minQuantity) {
         return;
