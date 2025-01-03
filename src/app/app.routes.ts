@@ -11,6 +11,8 @@ import { SearchResultsComponent } from './features/search-results/search-results
 import { ProductOverviewComponent } from './features/product/product-overview/product-overview.component';
 import { UserInfoComponent } from './features/user-info/user-info.component';
 import { ViewBagComponent } from './features/bags/view-bag/view-bag.component';
+import { CheckoutComponent } from './features/order/checkout/checkout.component';
+import { checkoutGuard } from './features/order/checkout/guard/checkout.guard';
 
 export const routes: Routes = [
   {
@@ -44,6 +46,11 @@ export const routes: Routes = [
   {
     path: 'bags/:id',
     component: ViewBagComponent,
+  },
+  {
+    path: 'checkout',
+    component: CheckoutComponent,
+    canActivate: [generalGuardGuard, checkoutGuard],
   },
   {
     path: '**',

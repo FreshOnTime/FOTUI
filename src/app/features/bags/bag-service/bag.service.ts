@@ -7,6 +7,7 @@ import { CustomerProduct } from '../../../models/customer-product-model';
 })
 export class BagService {
   private bags: Bag[] = [];
+  private selectedBag: Bag | null = null;
 
   constructor() {
     //TODO: fetch bags from server and store in local storage
@@ -26,6 +27,7 @@ export class BagService {
             maxQuantity: 10000,
             incrementStep: 100,
             buyingQuantity: 800,
+            discountPercentage: 10,
           },
           {
             id: '2',
@@ -96,6 +98,21 @@ export class BagService {
         ],
       },
     ];
+  }
+
+  public getSelectedBag(): Bag | null {
+    if (!this.selectedBag) {
+      const bag = localStorage.getItem('selectedBag');
+      if (bag) {
+        this.selectedBag = JSON.parse(bag);
+      }
+    }
+    return this.selectedBag;
+  }
+
+  public setSelectedBag(bag: Bag): void {
+    this.selectedBag = bag;
+    localStorage.setItem('selectedBag', JSON.stringify(bag));
   }
 
   public getBagById(id: string | null): Bag | null {

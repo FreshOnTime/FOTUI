@@ -8,4 +8,8 @@ export interface Address {
   zipCode: string;
   phoneNumber: string;
   country: string;
+  countryCode: string;
+  longitude?: number;
+  latitude?: number;
+  isDefault: boolean;
 }

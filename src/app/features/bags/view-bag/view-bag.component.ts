@@ -12,7 +12,8 @@ import { ScreenService } from '../../../shared/services/screen/screen.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { CurrencyPipe } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { BagService } from '../bag-service/bag.service';
 
 @Component({
   selector: 'app-view-bag',
@@ -37,98 +38,29 @@ export class ViewBagComponent {
   isMobile: boolean = false;
 
   public bag: Bag | null = null;
+  public bagId: string | null = null;
 
   selectedItems!: CustomerProduct[] | null;
 
   constructor(
     public screenService: ScreenService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private bagService: BagService
   ) {
     this.screenService.getScreenWidth().subscribe((width) => {
       this.isMobile = this.screenService.getCurrentBreakpoint() === 'xs';
-      console.log('Is mobile:', this.isMobile);
     });
 
     this.pageLoading = true;
-    this.simulatingFetchFromServer().then((data) => {
-      this.bag = data.bag;
-      this.pageLoading = false;
-    });
+    this.bagId = this.route.snapshot.paramMap.get('id');
+    this.bag = this.bagService.getBagById(this.bagId);
+    this.pageLoading = false;
   }
 
   private pressHoldSubscription: Subscription | null = null;
-
-  private simulatingFetchFromServer(): Promise<{
-    bag: Bag;
-    serviceFee: number;
-  }> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          serviceFee: 1000,
-          bag: {
-            id: '#1032',
-            name: 'My Bag',
-            items: [
-              {
-                id: '1',
-                name: 'Tomatoes',
-                productID: '3gch',
-                baseUnitQuantity: 1000,
-                pricePerUnit: 500,
-                measurementType: 'g',
-                minQuantity: 500,
-                maxQuantity: 10000,
-                incrementStep: 100,
-                buyingQuantity: 800,
-                discountPercentage: 10,
-              },
-
-              {
-                id: '3',
-                productID: 'nbv',
-                name: 'Potatoes',
-                baseUnitQuantity: 1,
-                pricePerUnit: 50,
-                measurementType: 'kg',
-                minQuantity: 1,
-                maxQuantity: 10,
-                incrementStep: 1,
-                buyingQuantity: 3,
-              },
-              {
-                id: '2',
-                productID: 'vhgc',
-                name: 'Apples',
-                baseUnitQuantity: 1,
-                pricePerUnit: 100,
-                measurementType: 'kg',
-                minQuantity: 1,
-                maxQuantity: 5,
-                incrementStep: 1,
-                buyingQuantity: 2,
-                discountPercentage: 5,
-              },
-              {
-                id: '4',
-                productID: 'bnvhg',
-                name: 'Tomatoes',
-                baseUnitQuantity: 1000,
-                pricePerUnit: 500,
-                measurementType: 'g',
-                minQuantity: 500,
-                maxQuantity: 10000,
-                incrementStep: 100,
-                buyingQuantity: 700,
-                discountPercentage: 10,
-              },
-            ],
-          },
-        });
-      }, 1000);
-    });
-  }
 
   public getItemPrice(
     item: CustomerProduct,
@@ -180,6 +112,20 @@ export class ViewBagComponent {
     }
 
     return Math.round(savings * 100) / 100;
+  }
+
+  public goToCheckout(): void {
+    if (this.bag!.items.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Empty Bag',
+        detail: 'Your bag is empty. Please add items to checkout.',
+      });
+      return;
+    }
+
+    this.router.navigate(['/checkout']);
+    this.bagService.setSelectedBag(this.bag!);
   }
 
   ///////// Remove Item //////////
