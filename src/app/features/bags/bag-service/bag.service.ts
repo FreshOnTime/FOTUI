@@ -110,7 +110,7 @@ export class BagService {
     return this.selectedBag;
   }
 
-  public setSelectedBag(bag: Bag): void {
+  public setSelectedBag(bag: Bag | null): void {
     this.selectedBag = bag;
     localStorage.setItem('selectedBag', JSON.stringify(bag));
   }

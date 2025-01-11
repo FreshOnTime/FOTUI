@@ -38,9 +38,45 @@
             </span>
           </ng-template>
         </p-step>
-
         <p-step
           [value]="2"
+          class="flex flex-row flex-auto gap-2"
+          [style]="{ gap: '0.5rem' }"
+        >
+          <ng-template
+            #content
+            let-activateCallback="activateCallback"
+            let-value="value"
+          >
+            <button
+              class="bg-transparent border-0 inline-flex flex-col gap-2"
+              (click)="activateCallback()"
+            >
+              <span
+                class="rounded-full border-2 w-10 h-10 inline-flex items-center justify-center"
+                [ngClass]="{
+                  'bg-primary text-primary-contrast border-primary':
+                    value <= activeStep,
+                  'border-surface': value > activeStep
+                }"
+              >
+                <i class="pi pi-calendar-clock"></i>
+              </span>
+            </button>
+            <span
+              class="hidden md:block"
+              [ngClass]="{
+                'text-gray-700 font-medium': value <= activeStep,
+                'text-gray-500': value > activeStep
+              }"
+            >
+              Date & Time
+            </span>
+          </ng-template>
+        </p-step>
+
+        <p-step
+          [value]="3"
           class="flex flex-row flex-auto gap-2"
           [style]="{ gap: '0.5rem' }"
         >
@@ -77,7 +113,7 @@
         </p-step>
 
         <p-step
-          [value]="3"
+          [value]="4"
           class="flex flex-row flex-auto gap-2"
           [style]="{ gap: '0.5rem' }"
         >
@@ -252,7 +288,16 @@
                   Phone Number is required
                 </small>
               </div>
-              <div class="col-span-full mt-2 flex justify-end">
+              <div class="col-span-full mt-2 flex justify-between">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  iconPos="left"
+                  [text]="true"
+                  size="small"
+                  severity="contrast"
+                  (onClick)="goToViewBag()"
+                ></p-button>
                 <p-button
                   label="Next"
                   icon="pi pi-arrow-right"
@@ -261,13 +306,30 @@
                   size="small"
                   type="submit"
                   severity="contrast"
-                />
+                ></p-button>
               </div>
             </form>
           </ng-template>
         </p-step-panel>
 
         <p-step-panel [value]="2">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form
+              [formGroup]="deliveryAddressForm"
+              class="grid grid-cols-6 gap-2 mx-auto max-w-screen-sm"
+              (ngSubmit)="onAddressSubmit()"
+            >
+              <div
+                class="text-center mt-4 mb-4 text-xl col-span-full font-semibold"
+              >
+                Select Date & Time
+              </div>
+              <app-order-date-input class="col-span-full" />
+            </form>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="3">
           <ng-template #content let-activateCallback="activateCallback">
             <form
               [formGroup]="paymentForm"
@@ -373,37 +435,185 @@
                   [text]="true"
                   size="small"
                   type="submit"
-                  severity="contrast"
+                  [severity]="paymentForm.invalid ? 'danger' : 'contrast'"
                 ></p-button>
               </div>
             </form>
           </ng-template>
         </p-step-panel>
 
-        <p-step-panel [value]="3">
+        <p-step-panel [value]="4">
           <ng-template #content let-activateCallback="activateCallback">
-            <div
-              class="flex flex-col gap-2 mx-auto"
-              style="min-height: 16rem; max-width: 24rem"
+            <form
+              [formGroup]="paymentForm"
+              (ngSubmit)="onPaymentSubmit()"
+              class="grid grid-cols-6 gap-2 mx-auto max-w-screen-sm"
             >
-              <div class="text-center mt-4 mb-4 text-xl font-semibold">
-                Account created successfully
+              <div
+                class="text-center mt-4 mb-4 text-xl col-span-full font-semibold"
+              >
+                Review & Place Order
               </div>
-              <div class="text-center">
-                <img
-                  alt="logo"
-                  src="https://primefaces.org/cdn/primeng/images/stepper/content.svg"
-                />
+              <div class="col-span-full">
+                <p-table [value]="bag!.items" size="small">
+                  <ng-template #header>
+                    <tr>
+                      <th [style]="{ 'text-align': 'left' }">Product</th>
+                      <th [style]="{ 'text-align': 'right' }">Quantity</th>
+                      <th [style]="{ 'text-align': 'right' }">Price(LKR)</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template #body let-item>
+                    <tr>
+                      <td [style]="{ 'text-align': 'left' }">
+                        {{ item.name }}
+                      </td>
+                      <td [style]="{ 'text-align': 'right' }">
+                        {{ item.buyingQuantity }}{{ item.measurementType }}
+                      </td>
+                      <td [style]="{ 'text-align': 'right' }">
+                        {{ getItemPrice(item) }}
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template #footer>
+                    <tr>
+                      <td
+                        [style]="{ 'text-align': 'left', border: 'none' }"
+                        colspan="1"
+                      >
+                        Original price
+                      </td>
+
+                      <td
+                        [style]="{ 'text-align': 'right', border: 'none' }"
+                        colspan="2"
+                        class="font-medium"
+                      >
+                        {{ getOriginalPrice(bag!) | currency : "LKR " }}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td
+                        [style]="{ 'text-align': 'left', border: 'none' }"
+                        colspan="1"
+                      >
+                        Savings
+                      </td>
+
+                      <td
+                        [style]="{ 'text-align': 'right', border: 'none' }"
+                        colspan="2"
+                      >
+                        <span class="text-green-600 font-medium">
+                          - {{ getTotalSavings(bag!) | currency : "LKR " }}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td [style]="{ 'text-align': 'left',  }" colspan="1">
+                        Service Fee
+                      </td>
+
+                      <td
+                        [style]="{ 'text-align': 'right',  }"
+                        colspan="2"
+                        class="font-medium"
+                      >
+                        {{ getServiceFee(bag!) | currency : "LKR " }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        [style]="{ 'text-align': 'left', border: 'none' }"
+                        colspan="1"
+                        class="font-bold text-gray-900"
+                      >
+                        Total
+                      </td>
+
+                      <td
+                        [style]="{ 'text-align': 'right', border: 'none' }"
+                        colspan="2"
+                        class="font-bold text-gray-900"
+                      >
+                        {{ geTotal(bag!) | currency : "LKR " }}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
               </div>
-            </div>
-            <div class="flex pt-6 justify-start">
-              <p-button
-                (onClick)="activateCallback(2)"
-                label="Back"
-                severity="secondary"
-                icon="pi pi-arrow-left"
-              />
-            </div>
+
+              <!-- Showing User his shipping details -->
+              <div class="col-span-full mt-4">
+                <div>
+                  <div class="text-lg font-semibold mb-2">Delivery to</div>
+                  <div class="text-sm text-gray-700">
+                    <p>
+                      {{ deliveryAddress?.firstName }}
+                      {{ deliveryAddress?.lastName }}
+                    </p>
+                    <p>
+                      {{ deliveryAddress?.streetAddress }}
+                      @if (deliveryAddress?.streetAddress2) {,
+                      {{ deliveryAddress?.streetAddress2 }}
+                      <br />
+                      }
+                      {{ deliveryAddress?.city }}
+
+                      {{ deliveryAddress?.postalCode }}
+                    </p>
+                    <p>
+                      {{ deliveryAddressForm.get("phoneNumber")?.value }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!-- Showing selected payment method -->
+              <div class="col-span-full mt-4">
+                <div>
+                  <div class="text-lg font-semibold mb-2">Payment Method</div>
+                  <div class="text-sm text-gray-700">
+                    <p>
+                      {{
+                        paymentForm.get("paymentMethod")?.value === "delivery"
+                          ? "Payment on Delivery"
+                          : paymentForm.get("paymentMethod")?.value === "bank"
+                          ? "Bank Transfer"
+                          : "Not selected"
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-span-full sticky bottom-0 bg-white/50 py-4">
+                <p-button
+                  label="Place Order"
+                  type="submit"
+                  severity="primary"
+                  [fluid]="true"
+                  [rounded]="true"
+                  [disabled]="
+                    paymentForm.invalid || deliveryAddressForm.invalid
+                  "
+                ></p-button>
+              </div>
+
+              <div class="col-span-full flex justify-between">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  iconPos="left"
+                  [text]="true"
+                  size="small"
+                  severity="contrast"
+                  (onClick)="activateCallback(2)"
+                ></p-button>
+              </div>
+            </form>
           </ng-template>
         </p-step-panel>
       </p-step-panels>

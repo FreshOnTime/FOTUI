@@ -5,11 +5,11 @@ export interface Address {
   streetAddress2?: string;
   city: string;
   state: string;
-  zipCode: string;
+  postalCode: string;
   phoneNumber: string;
-  country: string;
-  countryCode: string;
+  country?: string;
+  countryCode?: string;
   longitude?: number;
   latitude?: number;
-  isDefault: boolean;
+  isDefault?: boolean;
 }

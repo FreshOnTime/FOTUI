@@ -14,6 +14,7 @@ import { CardModule } from 'primeng/card';
 import { CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BagService } from '../bag-service/bag.service';
+import { OrderService } from '../../order/order-service/order.service';
 
 @Component({
   selector: 'app-view-bag',
@@ -48,7 +49,8 @@ export class ViewBagComponent {
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
-    private bagService: BagService
+    private bagService: BagService,
+    private orderService: OrderService
   ) {
     this.screenService.getScreenWidth().subscribe((width) => {
       this.isMobile = this.screenService.getCurrentBreakpoint() === 'xs';
@@ -76,42 +78,19 @@ export class ViewBagComponent {
   }
 
   public getOriginalPrice(item: Bag): number {
-    let subTotal = 0;
-
-    for (const item of this.bag!.items) {
-      subTotal += this.getItemPrice(item, false);
-    }
-
-    return Math.round(subTotal * 100) / 100;
+    return this.orderService.calculateBagTotals(item).originalPrice;
   }
 
-  public getNetTotal(item: Bag): number {
-    return (
-      this.getOriginalPrice(item) -
-      this.getTotalSavings(item) +
-      this.getServiceFee(item)
-    );
+  public geTotal(item: Bag): number {
+    return this.orderService.calculateBagTotals(item).total;
   }
 
   public getServiceFee(item: Bag): number {
-    let serviceFee =
-      (this.getOriginalPrice(item) - this.getTotalSavings(item)) * 0.3;
-
-    if (serviceFee < 500) {
-      return 500;
-    }
-
-    return Math.round(serviceFee * 100) / 100;
+    return this.orderService.calculateBagTotals(item).serviceFee;
   }
 
   public getTotalSavings(item: Bag): number {
-    let savings = 0;
-
-    for (const item of this.bag!.items) {
-      savings += this.getItemPrice(item, false) - this.getItemPrice(item);
-    }
-
-    return Math.round(savings * 100) / 100;
+    return this.orderService.calculateBagTotals(item).savings;
   }
 
   public goToCheckout(): void {

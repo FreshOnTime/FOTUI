@@ -30,6 +30,35 @@ export class OrderService {
     return new Date();
   }
 
+  public calculateBagTotals(bag: Bag) {
+    let originalPrice = 0;
+    let savings = 0;
+    let serviceFee = 0;
+    let total = 0;
+
+    bag.items.forEach((item: CustomerProduct) => {
+      const price =
+        (item.buyingQuantity / item.baseUnitQuantity) * item.pricePerUnit;
+      originalPrice += price;
+      const discountPercentage = item.discountPercentage || 0;
+      savings += (price * discountPercentage) / 100;
+      serviceFee += price * 0.3;
+    });
+
+    if (serviceFee < 500) {
+      serviceFee = 500;
+    }
+
+    total = originalPrice - savings + serviceFee;
+
+    return {
+      originalPrice: Math.round(originalPrice * 100) / 100,
+      savings: Math.round(savings * 100) / 100,
+      serviceFee: Math.round(serviceFee * 100) / 100,
+      total: Math.round(total * 100) / 100,
+    };
+  }
+
   public createOrder(orderDate: Date, bag: Bag): Observable<any> {
     // Create order
     console.log('Order created:', orderDate, bag);
