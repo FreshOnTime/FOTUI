@@ -1,5 +1,5 @@
 export interface ScheduleRule {
-  condition: string;
+  condition: 'every' | 'exclude' | 'set';
   value: any;
-  type: string;
+  type: 'day' | 'date' | 'numeric';
 }

@@ -193,7 +193,11 @@ export class OrderDateInputComponent {
     };
 
     this.orderService.setCheckoutState(orderSchedule);
-    this.orderService.calculateOrdersUpto(this.currentDate, 360, scheduleRules);
+    this.orderService.computeUpcomingOrderDates(
+      this.currentDate,
+      60,
+      scheduleRules
+    );
 
     console.log('Order Schedule:', this.orderService.getCheckoutState());
   }

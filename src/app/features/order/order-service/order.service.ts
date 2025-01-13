@@ -133,9 +133,9 @@ export class OrderService {
     return new Observable();
   }
 
-  public calculateOrdersUpto(
-    currentDate: Date,
-    numdays: number = 60,
+  public computeUpcomingOrderDates(
+    startDate: Date,
+    maxDaysToCompute: number = 60,
     rules: ScheduleRule[] = []
   ): Date[] {
     const alldays = [
@@ -152,7 +152,7 @@ export class OrderService {
 
     let nextOrderDates: Date[] = [];
 
-    if (!currentDate) {
+    if (!startDate) {
       return [];
     }
 
@@ -172,7 +172,7 @@ export class OrderService {
       );
     }
 
-    let adjustedCurrentDate: Date = getOperatingTimezoneDate(currentDate); // don't need do this since we are using backend date but just in case
+    let operatingTimezoneDate: Date = getOperatingTimezoneDate(startDate); // don't need do this since we are using backend date but just in case
 
     function getDayName(date: Date): string {
       const day = date.getDay();
@@ -204,14 +204,10 @@ export class OrderService {
       return date.getDate() === value;
     }
 
-    function isDayOfWeek(date: Date, day: string): boolean {
-      return isDay(date, day);
-    }
-
     let totaldaysChecked = 0;
-    let nextDate = adjustedCurrentDate;
+    let nextDate = operatingTimezoneDate;
 
-    while (totaldaysChecked < numdays) {
+    while (totaldaysChecked < maxDaysToCompute) {
       for (const rule of rules) {
         const tempDate = new Date(nextDate);
         if (rule.condition === 'every') {
@@ -233,6 +229,94 @@ export class OrderService {
                 nextOrderDates.push(tempDate);
               }
             } else if (rule.value === 'monthStart' && isMonthStart(nextDate)) {
+              if (
+                !nextOrderDates.find(
+                  (date) => date.getTime() === tempDate.getTime()
+                )
+              ) {
+                nextOrderDates.push(tempDate);
+              }
+            } else if (rule.value === 'monthEnd' && isMonthEnd(nextDate)) {
+              if (
+                !nextOrderDates.find(
+                  (date) => date.getTime() === tempDate.getTime()
+                )
+              ) {
+                nextOrderDates.push(tempDate);
+              }
+            } else if (alldays.includes(rule.value)) {
+              if (isDay(nextDate, rule.value)) {
+                if (
+                  !nextOrderDates.find(
+                    (date) => date.getTime() === tempDate.getTime()
+                  )
+                ) {
+                  nextOrderDates.push(tempDate);
+                }
+              }
+            }
+          } else if (rule.type === 'numeric') {
+            if (isNumeric(nextDate, rule.value)) {
+              if (
+                !nextOrderDates.find(
+                  (date) => date.getTime() === tempDate.getTime()
+                )
+              ) {
+                nextOrderDates.push(tempDate);
+              }
+            }
+          }
+        } else if (rule.condition === 'exclude') {
+          if (rule.type === 'day') {
+            if (rule.value === 'weekday' && isWeekday(nextDate)) {
+              nextOrderDates = nextOrderDates.filter(
+                (date) => date.getTime() !== tempDate.getTime()
+              );
+            } else if (rule.value === 'weekend' && isWeekend(nextDate)) {
+              nextOrderDates = nextOrderDates.filter(
+                (date) => date.getTime() !== tempDate.getTime()
+              );
+            } else if (rule.value === 'monthStart' && isMonthStart(nextDate)) {
+              nextOrderDates = nextOrderDates.filter(
+                (date) => date.getTime() !== tempDate.getTime()
+              );
+            } else if (rule.value === 'monthEnd' && isMonthEnd(nextDate)) {
+              nextOrderDates = nextOrderDates.filter(
+                (date) => date.getTime() !== tempDate.getTime()
+              );
+            } else if (alldays.includes(rule.value)) {
+              if (isDay(nextDate, rule.value)) {
+                nextOrderDates = nextOrderDates.filter(
+                  (date) => date.getTime() !== tempDate.getTime()
+                );
+              }
+            }
+          } else if (rule.type === 'numeric') {
+            if (isNumeric(nextDate, rule.value)) {
+              nextOrderDates = nextOrderDates.filter(
+                (date) => date.getTime() !== tempDate.getTime()
+              );
+            }
+          } else if (rule.type === 'date') {
+            const ruleDate = new Date(rule.value);
+            if (
+              ruleDate.getDate() === tempDate.getDate() &&
+              ruleDate.getMonth() === tempDate.getMonth() &&
+              ruleDate.getFullYear() === tempDate.getFullYear()
+            ) {
+              nextOrderDates = nextOrderDates.filter(
+                (date) => date.getTime() !== tempDate.getTime()
+              );
+            }
+          }
+        } else if (rule.condition === 'set') {
+          if (rule.type === 'date') {
+            const ruleDate = new Date(rule.value);
+            if (
+              ruleDate.getDate() === tempDate.getDate() &&
+              ruleDate.getMonth() === tempDate.getMonth() &&
+              ruleDate.getFullYear() === tempDate.getFullYear()
+            ) {
               if (
                 !nextOrderDates.find(
                   (date) => date.getTime() === tempDate.getTime()
