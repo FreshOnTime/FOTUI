@@ -70,12 +70,12 @@
                 'text-gray-500': value > activeStep
               }"
             >
-              Date & Time
+              Delivery Schedule
             </span>
           </ng-template>
         </p-step>
 
-        <p-step
+        <!-- <p-step
           [value]="3"
           class="flex flex-row flex-auto gap-2"
           [style]="{ gap: '0.5rem' }"
@@ -110,10 +110,10 @@
               Payment
             </span>
           </ng-template>
-        </p-step>
+        </p-step> -->
 
         <p-step
-          [value]="4"
+          [value]="3"
           class="flex flex-row flex-auto gap-2"
           [style]="{ gap: '0.5rem' }"
         >
@@ -151,6 +151,12 @@
       </p-step-list>
 
       <p-step-panels>
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+        <!-- ******* Delivery Address Form ******* -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+
         <p-step-panel [value]="1">
           <ng-template #content let-activateCallback="activateCallback">
             <form
@@ -312,24 +318,56 @@
           </ng-template>
         </p-step-panel>
 
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+        <!-- ********** Order Schedule *********** -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+
         <p-step-panel [value]="2">
           <ng-template #content let-activateCallback="activateCallback">
             <form
-              [formGroup]="deliveryAddressForm"
+              [formGroup]="scheduleForm"
               class="grid grid-cols-6 gap-2 mx-auto max-w-screen-sm"
-              (ngSubmit)="onAddressSubmit()"
+              (ngSubmit)="onScheduleSubmit()"
             >
               <div
                 class="text-center mt-4 mb-4 text-xl col-span-full font-semibold"
               >
-                Select Date & Time
+                Select Delivery Schedule
               </div>
               <app-order-date-input class="col-span-full" />
+              <div class="col-span-full mt-2 flex justify-between">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  iconPos="left"
+                  [text]="true"
+                  size="small"
+                  severity="contrast"
+                  (onClick)="activateCallback(1)"
+                ></p-button>
+                <p-button
+                  label="Next"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  [text]="true"
+                  size="small"
+                  type="submit"
+                  severity="contrast"
+                ></p-button>
+              </div>
             </form>
           </ng-template>
         </p-step-panel>
 
-        <p-step-panel [value]="3">
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+        <!-- ********** Payment Method *********** -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+
+        <!-- <p-step-panel [value]="3">
           <ng-template #content let-activateCallback="activateCallback">
             <form
               [formGroup]="paymentForm"
@@ -342,7 +380,7 @@
                 Select Payment Method
               </div>
 
-              <!-- Payment on Delivery -->
+            
               <div
                 class="rounded-lg border col-span-6 md:col-span-3 border-gray-200 bg-gray-50 p-4 ps-4"
               >
@@ -371,7 +409,7 @@
                 </div>
               </div>
 
-              <!-- Bank Transfer -->
+        
               <div
                 class="rounded-lg border col-span-6 md:col-span-3 border-gray-200 bg-gray-50 p-4 ps-4"
               >
@@ -409,7 +447,7 @@
                   </div>
                 </div>
               </div>
-              <!-- Validation Error -->
+            
               <div
                 *ngIf="paymentForm.invalid && paymentForm.touched"
                 class="col-span-full text-red-500 text-sm mt-2"
@@ -417,7 +455,7 @@
                 Please select a payment method to proceed.
               </div>
 
-              <!-- Buttons -->
+            
               <div class="col-span-full mt-2 flex justify-between">
                 <p-button
                   label="Back"
@@ -426,7 +464,7 @@
                   [text]="true"
                   size="small"
                   severity="contrast"
-                  (onClick)="activateCallback(1)"
+                  (onClick)="activateCallback(2)"
                 ></p-button>
                 <p-button
                   label="Next"
@@ -441,8 +479,14 @@
             </form>
           </ng-template>
         </p-step-panel>
+ -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+        <!-- ******* Review & Place Order ******** -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
 
-        <p-step-panel [value]="4">
+        <p-step-panel [value]="3">
           <ng-template #content let-activateCallback="activateCallback">
             <form
               [formGroup]="paymentForm"

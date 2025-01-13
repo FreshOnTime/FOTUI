@@ -18,7 +18,8 @@ import { Bag } from '../../../models/bag-model';
 import { TableModule } from 'primeng/table';
 import { CustomerProduct } from '../../../models/customer-product-model';
 import { Router } from '@angular/router';
-import { OrderDateInputComponent } from '../../../shared/components/order-date-input/order-date-input.component';
+import { OrderDateInputComponent } from '../order-date-input/order-date-input.component';
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -42,6 +43,7 @@ export class CheckoutComponent {
 
   deliveryAddressForm: FormGroup;
   paymentForm: FormGroup;
+  scheduleForm: FormGroup;
 
   constructor(
     private bagService: BagService,
@@ -63,6 +65,10 @@ export class CheckoutComponent {
     this.paymentForm = this.fb.group({
       paymentMethod: ['', [Validators.required]],
     });
+
+    this.scheduleForm = this.fb.group({
+      scheduleRules: [[], [Validators.required]],
+    });
   }
 
   public onAddressSubmit(): void {
@@ -75,7 +81,16 @@ export class CheckoutComponent {
     }
   }
 
-  onPaymentSubmit(): void {
+  public onScheduleSubmit(): void {
+    if (this.scheduleForm.valid) {
+      console.log('Schedule:', this.scheduleForm.value);
+      this.activeStep = 3;
+    } else {
+      this.scheduleForm.markAllAsTouched();
+    }
+  }
+
+  public onPaymentSubmit(): void {
     if (this.paymentForm.valid) {
       console.log('Payment:', this.paymentForm.value);
       this.activeStep = 3;
