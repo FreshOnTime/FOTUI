@@ -195,7 +195,7 @@ export class OrderDateInputComponent {
     this.orderService.setCheckoutState(orderSchedule);
     this.orderService.computeUpcomingOrderDates(
       this.currentDate,
-      60,
+      10,
       scheduleRules
     );
 
