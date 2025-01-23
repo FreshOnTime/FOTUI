@@ -1,0 +1,172 @@
+<form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+  <div
+    formArrayName="schedule"
+    class="grid grid-cols-12 gap-2 mb-1 pb-2 rounded-sm"
+  >
+    @for (scheduleItem of schedule.controls; track $index) {
+    <div
+      class="grid col-span-full grid-cols-12 gap-2 mb-1 border p-1 pb-2 rounded-md"
+      [formGroupName]="$index"
+    >
+      <p-select
+        [options]="conditions"
+        optionLabel="name"
+        placeholder="Condition"
+        size="small"
+        class="col-span-6"
+        formControlName="condition"
+        (onChange)="onScheduleRulwConditionChange($index)"
+      />
+
+      @switch (scheduleItem.get('type')?.value) { @case ('date') {
+
+      <p-datepicker
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        class="col-span-6"
+        formControlName="value"
+        placeholder="Specific Date"
+        [size]="'small'"
+        [style]="{ height: '34px' }"
+        [fluid]="true"
+        [minDate]="minOrderDate"
+        [maxDate]="maxOrderDate"
+      />
+
+      } @case ('numeric') {
+      <p-select
+        [options]="numericValues"
+        optionLabel="name"
+        placeholder="Day of Month"
+        size="small"
+        class="col-span-6"
+        [filter]="true"
+        filterBy="name"
+        formControlName="value"
+        scrollHeight="160px"
+      />
+      } @default {
+      <p-select
+        [options]="days"
+        optionLabel="name"
+        placeholder="Day of Week"
+        size="small"
+        class="col-span-6"
+        [filter]="true"
+        filterBy="name"
+        formControlName="value"
+      />
+      } }
+
+      <small
+        class="text-red-500 col-span-full"
+        *ngIf="scheduleItem.get('value')?.errors?.['required'] && scheduleItem.get('value')?.touched"
+      >
+        Please select a
+        <span *ngIf="scheduleItem.get('type')?.value === 'date'">date</span>
+        <span *ngIf="scheduleItem.get('type')?.value === 'numeric'"
+          >day of month</span
+        >
+        <span *ngIf="scheduleItem.get('type')?.value === 'day'"
+          >day of week</span
+        >
+      </small>
+
+      <div class="flex flex-wrap gap-4 px-1 col-span-full">
+        @if (scheduleItem.get('condition')?.value.value === 'every' ||
+        scheduleItem.get('condition')?.value.value === 'exclude') {
+        <div class="flex items-center gap-1">
+          <input
+            type="radio"
+            class="cursor-pointer"
+            formControlName="type"
+            value="day"
+            id="day-input_{{ $index }}"
+            (change)="onTypeChange($index)"
+          />
+          <label
+            for="day-input_{{ $index }}"
+            class="text-sm cursor-pointer leading-none"
+          >
+            Day of Week
+          </label>
+        </div>
+        } @if (scheduleItem.get('condition')?.value.value === 'every' ||
+        scheduleItem.get('condition')?.value.value === 'exclude') {
+        <div class="flex items-center gap-1">
+          <input
+            type="radio"
+            class="cursor-pointer"
+            formControlName="type"
+            value="numeric"
+            id="numeric-input_{{ $index }}"
+            (change)="onTypeChange($index)"
+          />
+          <label
+            for="numeric-input_{{ $index }}"
+            class="text-sm cursor-pointer leading-none"
+          >
+            Day of Month
+          </label>
+        </div>
+        }
+
+        <!-- by Date -->
+        @if (scheduleItem.get('condition')?.value.value !== 'every' ) {
+        <div class="flex items-center gap-1">
+          <input
+            type="radio"
+            class="cursor-pointer"
+            formControlName="type"
+            value="date"
+            id="date-input_{{ $index }}"
+            (change)="onTypeChange($index)"
+          />
+          <label
+            for="date-input_{{ $index }}"
+            class="text-sm cursor-pointer leading-none"
+          >
+            Specific Date
+          </label>
+        </div>
+        }
+
+        <button
+          class="text-red-500 text-sm font-semibold hidden sm:block ml-auto hover:underline"
+          (click)="removeScheduleItem($index)"
+        >
+          Remove Rule
+        </button>
+      </div>
+      <p-button
+        label="Remove Rule"
+        class="col-span-full block sm:hidden"
+        (onClick)="removeScheduleItem($index)"
+        size="small"
+        [fluid]="true"
+        [outlined]="true"
+        severity="danger"
+      />
+    </div>
+    }
+    <p-button
+      label="Add Rule"
+      class="col-span-full"
+      (onClick)="addScheduleItem()"
+      size="small"
+      [fluid]="true"
+      severity="contrast"
+      [outlined]="true"
+      [disabled]="minOrderDate === null || minOrderDate === undefined"
+    />
+
+    <p-button
+      label="Apply"
+      class="col-span-full"
+      type="submit"
+      size="small"
+      [fluid]="true"
+      [disabled]="minOrderDate === null || minOrderDate === undefined"
+    />
+  </div>
+</form>

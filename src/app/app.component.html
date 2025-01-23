@@ -1,23 +1,16 @@
-<body class="w-full scroll-smooth relative flex flex-col">
+<body class="w-full min-h-screen scroll-smooth relative flex flex-col">
   @if (showNavbar) {
   <app-navbar class="sticky top-0 z-50"></app-navbar>
   }
 
   <router-outlet class="flex-grow-0" />
-
+  <p-toast
+    [breakpoints]="{
+      '768px': { width: '100%', right: '0', left: '0', padding: '4px' }
+    }"
+  />
+  <p-confirmdialog />
   @if(showFooter){
   <app-footer class="mt-auto"></app-footer>
   }
-
-  <!-- <p-scrolltop
-    target="parent"
-    class="absolute right-4 bottom-4"
-    [threshold]="50"
-    [buttonProps]="{
-    severity: 'contrast',
-    raised: true,
-    rounded: true,
-
-  }"
-  /> -->
 </body>
