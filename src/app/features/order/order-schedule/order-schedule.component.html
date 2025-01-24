@@ -1,0 +1,107 @@
+<form
+  [formGroup]="orderForm"
+  (ngSubmit)="onSubmit()"
+  class="max-w-4xl mx-auto p-6 space-y-6 bg-white shadow-md rounded-lg"
+>
+  <div formArrayName="schedule">
+    <div
+      *ngFor="let scheduleItem of schedule.controls; let i = index"
+      [formGroupName]="i"
+      class="space-y-4"
+    >
+      <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+        <!-- Condition Dropdown -->
+        <div class="flex items-center space-x-4">
+          <label
+            for="condition"
+            class="text-sm font-semibold text-gray-700 w-24"
+            >Condition</label
+          >
+          <select
+            formControlName="condition"
+            (change)="onConditionChange(i)"
+            class="p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value="every">Every</option>
+            <option value="except">Except</option>
+            <option value="onDate">On Date</option>
+          </select>
+        </div>
+
+        <!-- Value for the Condition -->
+        <div class="flex items-center space-x-4">
+          <label for="value" class="text-sm font-semibold text-gray-700 w-24"
+            >Value</label
+          >
+          <ng-container [ngSwitch]="scheduleItem.get('condition')?.value">
+            <!-- If "Every" is selected -->
+            <div *ngSwitchCase="'every'" class="w-full">
+              <select
+                formControlName="value"
+                class="p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="weekdays">Weekdays</option>
+                <option value="weekend">Weekend</option>
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday">Saturday</option>
+                <option value="sunday">Sunday</option>
+              </select>
+            </div>
+            <!-- If "Except" is selected -->
+            <div *ngSwitchCase="'except'" class="w-full">
+              <select
+                formControlName="value"
+                class="p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="poya">Poya Days</option>
+                <option value="weekend">Weekend</option>
+              </select>
+            </div>
+            <!-- If "On Date" is selected -->
+            <div *ngSwitchCase="'onDate'" class="w-full">
+              <input
+                formControlName="value"
+                type="date"
+                class="p-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- Remove Rule Button -->
+        <div class="flex justify-end mt-4">
+          <button
+            type="button"
+            (click)="removeScheduleItem(i)"
+            class="text-red-600 hover:text-red-800 text-sm"
+          >
+            Remove Rule
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Another Rule Button -->
+  <div class="flex justify-between items-center">
+    <button
+      type="button"
+      (click)="addScheduleItem()"
+      class="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 text-sm"
+    >
+      Add Another Rule
+    </button>
+    <button
+      type="submit"
+      [disabled]="orderForm.invalid"
+      class="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 text-sm"
+      [class.opacity-50]="orderForm.invalid"
+    >
+      Submit
+    </button>
+  </div>
+</form>

@@ -1,14 +1,22 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { AuthService } from './core/services/auth/auth.service';
-import { ScrollTop } from 'primeng/scrolltop';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent, ScrollTop],
+  imports: [
+    RouterOutlet,
+    NavbarComponent,
+    FooterComponent,
+    ConfirmDialog,
+    ToastModule,
+  ],
+
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

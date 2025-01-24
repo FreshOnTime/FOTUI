@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { ProductCard } from '../../../models/product-card-model';
 import { CarouselModule } from 'primeng/carousel';
 import { ProductCardComponent } from '../product-card/product-card.component';
@@ -16,15 +16,25 @@ export class ProductsCarouselComponent {
   @Input() loading: boolean = true;
 
   public products: ProductCard[] = [];
-  responsiveOptions: any[] | undefined;
+  public isMobile: boolean = false;
+  public responsiveOptions: any[] | undefined;
+
+  public autoPlayInterval: number = 5000;
 
   ngOnInit() {
     this.fetchProducts();
 
+    this.autoPlayInterval = Math.floor(Math.random() * 5000) + 5000;
+
     this.responsiveOptions = [
       {
+        breakpoint: '2400px',
+        numVisible: 4,
+        numScroll: 1,
+      },
+      {
         breakpoint: '1400px',
-        numVisible: 3,
+        numVisible: 4,
         numScroll: 1,
       },
       {
@@ -64,8 +74,8 @@ export class ProductsCarouselComponent {
         id: '2',
         name: 'Red Apples',
         price: 200,
-        rating: 3.2,
-        totalReviews: 50,
+        rating: 0,
+        totalReviews: 0,
         discount: 20,
         image: '/tomatoes.jpg',
         badges: ['trending'],
@@ -86,10 +96,29 @@ export class ProductsCarouselComponent {
         price: 5000,
         rating: 4.0,
         totalReviews: 25,
-        discount: 5,
+        discount: 50,
         image: '/tomatoes.jpg',
         badges: ['fast-delivery'],
       },
+      {
+        id: '5',
+        name: 'Pineapples',
+        price: 1000,
+        rating: 3.9,
+        totalReviews: 30,
+
+        image: '/tomatoes.jpg',
+        badges: ['best-price'],
+      },
     ];
+  }
+
+  @HostListener('window:resize', ['$event'])
+  private onResize(event: Event): void {
+    this.updateIsMobile();
+  }
+
+  private updateIsMobile(): void {
+    this.isMobile = window.innerWidth < 768;
   }
 }

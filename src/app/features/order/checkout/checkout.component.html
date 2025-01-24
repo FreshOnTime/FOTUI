@@ -1,0 +1,666 @@
+<section class="bg-white py-6 antialiased">
+  <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <p-stepper [(value)]="activeStep" class="basis-[40rem]">
+      <p-step-list>
+        <p-step
+          [value]="1"
+          class="flex flex-row flex-auto gap-2"
+          [style]="{ gap: '0.5rem' }"
+        >
+          <ng-template
+            #content
+            let-activateCallback="activateCallback"
+            let-value="value"
+          >
+            <button
+              class="bg-transparent border-0 inline-flex flex-col gap-2"
+              (click)="activateCallback()"
+            >
+              <span
+                class="rounded-full border-2 w-10 h-10 inline-flex items-center justify-center"
+                [ngClass]="{
+                  'bg-primary text-primary-contrast border-primary':
+                    value <= activeStep,
+                  'border-surface': value > activeStep
+                }"
+              >
+                <i class="pi pi-truck"></i>
+              </span>
+            </button>
+            <span
+              class="hidden md:block"
+              [ngClass]="{
+                'text-gray-700 font-medium': value <= activeStep,
+                'text-gray-500': value > activeStep
+              }"
+            >
+              Delivery Details
+            </span>
+          </ng-template>
+        </p-step>
+        <p-step
+          [value]="2"
+          class="flex flex-row flex-auto gap-2"
+          [style]="{ gap: '0.5rem' }"
+        >
+          <ng-template
+            #content
+            let-activateCallback="activateCallback"
+            let-value="value"
+          >
+            <button
+              class="bg-transparent border-0 inline-flex flex-col gap-2"
+              (click)="activateCallback()"
+            >
+              <span
+                class="rounded-full border-2 w-10 h-10 inline-flex items-center justify-center"
+                [ngClass]="{
+                  'bg-primary text-primary-contrast border-primary':
+                    value <= activeStep,
+                  'border-surface': value > activeStep
+                }"
+              >
+                <i class="pi pi-calendar-clock"></i>
+              </span>
+            </button>
+            <span
+              class="hidden md:block"
+              [ngClass]="{
+                'text-gray-700 font-medium': value <= activeStep,
+                'text-gray-500': value > activeStep
+              }"
+            >
+              Delivery Schedule
+            </span>
+          </ng-template>
+        </p-step>
+
+        <!-- <p-step
+          [value]="3"
+          class="flex flex-row flex-auto gap-2"
+          [style]="{ gap: '0.5rem' }"
+        >
+          <ng-template
+            #content
+            let-activateCallback="activateCallback"
+            let-value="value"
+          >
+            <button
+              class="bg-transparent border-0 inline-flex flex-col gap-2"
+              (click)="activateCallback()"
+            >
+              <span
+                class="rounded-full border-2 w-10 h-10 inline-flex items-center justify-center"
+                [ngClass]="{
+                  'bg-primary text-primary-contrast border-primary':
+                    value <= activeStep,
+                  'border-surface': value > activeStep
+                }"
+              >
+                <i class="pi pi-credit-card"></i>
+              </span>
+            </button>
+            <span
+              class="hidden md:block"
+              [ngClass]="{
+                'text-gray-700 font-medium': value <= activeStep,
+                'text-gray-500': value > activeStep
+              }"
+            >
+              Payment
+            </span>
+          </ng-template>
+        </p-step> -->
+
+        <p-step
+          [value]="3"
+          class="flex flex-row flex-auto gap-2"
+          [style]="{ gap: '0.5rem' }"
+        >
+          <ng-template
+            #content
+            let-activateCallback="activateCallback"
+            let-value="value"
+          >
+            <button
+              class="bg-transparent border-0 inline-flex flex-col gap-2"
+              (click)="activateCallback()"
+            >
+              <span
+                class="rounded-full border-2 w-10 h-10 inline-flex items-center justify-center"
+                [ngClass]="{
+                  'bg-primary text-primary-contrast border-primary':
+                    value <= activeStep,
+                  'border-surface': value > activeStep
+                }"
+              >
+                <i class="pi pi-check"></i>
+              </span>
+            </button>
+            <span
+              class="hidden md:block"
+              [ngClass]="{
+                'text-gray-700 font-medium': value <= activeStep,
+                'text-gray-500': value > activeStep
+              }"
+            >
+              Review & Place Order
+            </span>
+          </ng-template>
+        </p-step>
+      </p-step-list>
+
+      <p-step-panels>
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+        <!-- ******* Delivery Address Form ******* -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+
+        <p-step-panel [value]="1">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form
+              [formGroup]="deliveryAddressForm"
+              class="grid grid-cols-6 gap-2 mx-auto max-w-screen-sm"
+              (ngSubmit)="onAddressSubmit()"
+            >
+              <div
+                class="text-center mt-4 mb-4 text-xl col-span-full font-semibold"
+              >
+                Delivery Details
+              </div>
+              <div class="col-span-3">
+                <input
+                  name="firstName"
+                  pInputText
+                  type="text"
+                  pSize="small"
+                  placeholder="First Name"
+                  [fluid]="true"
+                  [required]="true"
+                  formControlName="firstName"
+                  autocomplete="name"
+                />
+                <small
+                  class="text-red-500"
+                  *ngIf="deliveryAddressForm.get('firstName')?.errors?.['required'] && deliveryAddressForm.get('firstName')?.touched"
+                >
+                  First Name is required
+                </small>
+              </div>
+              <div class="col-span-3">
+                <input
+                  name="lastName"
+                  pInputText
+                  type="text"
+                  pSize="small"
+                  placeholder="Last Name"
+                  [fluid]="true"
+                  [required]="true"
+                  formControlName="lastName"
+                  autocomplete="family-name"
+                />
+                <small
+                  class="text-red-500"
+                  *ngIf="deliveryAddressForm.get('lastName')?.errors?.['required'] && deliveryAddressForm.get('lastName')?.touched"
+                >
+                  Last Name is required
+                </small>
+              </div>
+              <div class="col-span-6">
+                <input
+                  name="streetAddress"
+                  pInputText
+                  type="text"
+                  pSize="small"
+                  placeholder="Street Address"
+                  [fluid]="true"
+                  [required]="true"
+                  formControlName="streetAddress"
+                  autocomplete="street-address"
+                />
+                <small
+                  class="text-red-500"
+                  *ngIf="deliveryAddressForm.get('streetAddress')?.errors?.['required'] && deliveryAddressForm.get('streetAddress')?.touched"
+                >
+                  Street Address is required
+                </small>
+              </div>
+              <div class="col-span-6">
+                <input
+                  name="streetAddress2"
+                  pInputText
+                  type="text"
+                  pSize="small"
+                  placeholder="Street Address 2 (Optional)"
+                  [fluid]="true"
+                  formControlName="streetAddress2"
+                  autocomplete="address-line2"
+                />
+              </div>
+              <div class="col-span-3 md:col-span-2">
+                <input
+                  name="city"
+                  pInputText
+                  type="text"
+                  pSize="small"
+                  placeholder="City"
+                  [fluid]="true"
+                  [required]="true"
+                  formControlName="city"
+                  autocomplete="address-level3"
+                />
+                <small
+                  class="text-red-500"
+                  *ngIf="deliveryAddressForm.get('city')?.errors?.['required'] && deliveryAddressForm.get('city')?.touched"
+                >
+                  City is required
+                </small>
+              </div>
+              <div class="col-span-3 md:col-span-2">
+                <p-inputNumber
+                  name="postalCode"
+                  type="number"
+                  size="small"
+                  placeholder="Postal Code"
+                  [fluid]="true"
+                  [required]="true"
+                  formControlName="postalCode"
+                  autocomplete="postal-code"
+                />
+                <small
+                  class="text-red-500"
+                  *ngIf="deliveryAddressForm.get('postalCode')?.errors?.['required'] && deliveryAddressForm.get('postalCode')?.touched"
+                >
+                  Postal Code is required
+                </small>
+              </div>
+              <div class="col-span-3 md:col-span-2">
+                <input
+                  name="phoneNumber"
+                  type="tel"
+                  pSize="small"
+                  placeholder="Phone Number"
+                  pInputText
+                  [fluid]="true"
+                  [required]="true"
+                  formControlName="phoneNumber"
+                  autocomplete="tel"
+                />
+                <small
+                  class="text-red-500"
+                  *ngIf="deliveryAddressForm.get('phoneNumber')?.errors?.['required'] && deliveryAddressForm.get('phoneNumber')?.touched"
+                >
+                  Phone Number is required
+                </small>
+              </div>
+              <div class="col-span-full mt-2 flex justify-between">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  iconPos="left"
+                  [text]="true"
+                  size="small"
+                  severity="contrast"
+                  (onClick)="goToViewBag()"
+                ></p-button>
+                <p-button
+                  label="Next"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  [text]="true"
+                  size="small"
+                  type="submit"
+                  severity="contrast"
+                ></p-button>
+              </div>
+            </form>
+          </ng-template>
+        </p-step-panel>
+
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+        <!-- ********** Order Schedule *********** -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+
+        <p-step-panel [value]="2">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form
+              [formGroup]="scheduleForm"
+              class="grid grid-cols-6 gap-2 mx-auto max-w-screen-sm"
+              (ngSubmit)="onScheduleSubmit()"
+            >
+              <div
+                class="text-center mt-4 mb-4 text-xl col-span-full font-semibold"
+              >
+                Select Delivery Schedule
+              </div>
+              <app-order-date-input class="col-span-full" />
+              <div class="col-span-full mt-2 flex justify-between">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  iconPos="left"
+                  [text]="true"
+                  size="small"
+                  severity="contrast"
+                  (onClick)="activateCallback(1)"
+                ></p-button>
+                <p-button
+                  label="Next"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  [text]="true"
+                  size="small"
+                  type="submit"
+                  severity="contrast"
+                ></p-button>
+              </div>
+            </form>
+          </ng-template>
+        </p-step-panel>
+
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+        <!-- ********** Payment Method *********** -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+
+        <!-- <p-step-panel [value]="3">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form
+              [formGroup]="paymentForm"
+              (ngSubmit)="onPaymentSubmit()"
+              class="grid grid-cols-6 gap-2 mx-auto max-w-screen-sm"
+            >
+              <div
+                class="text-center mt-4 mb-4 text-xl col-span-full font-semibold"
+              >
+                Select Payment Method
+              </div>
+
+            
+              <div
+                class="rounded-lg border col-span-6 md:col-span-3 border-gray-200 bg-gray-50 p-4 ps-4"
+              >
+                <div class="flex items-start">
+                  <div class="flex h-5 items-center">
+                    <input
+                      id="pay-on-delivery"
+                      type="radio"
+                      name="paymentMethod"
+                      value="delivery"
+                      class="h-4 w-4 border-gray-300 bg-white text-primary-600"
+                      formControlName="paymentMethod"
+                    />
+                  </div>
+                  <div class="ms-4 text-sm">
+                    <label
+                      for="pay-on-delivery"
+                      class="font-medium leading-none text-gray-900"
+                    >
+                      Payment on Delivery
+                    </label>
+                    <p class="mt-1 text-xs font-normal text-gray-500">
+                      Pay when you receive your order.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+        
+              <div
+                class="rounded-lg border col-span-6 md:col-span-3 border-gray-200 bg-gray-50 p-4 ps-4"
+              >
+                <div class="flex items-start">
+                  <div class="flex h-5 items-center">
+                    <input
+                      id="bank-transfer"
+                      type="radio"
+                      name="paymentMethod"
+                      value="bank"
+                      class="h-4 w-4 border-gray-300 bg-white text-primary-600"
+                      formControlName="paymentMethod"
+                    />
+                  </div>
+                  <div class="ms-4 text-sm">
+                    <label
+                      for="bank-transfer"
+                      class="font-medium leading-none text-gray-900"
+                    >
+                      Bank Transfer
+                    </label>
+                    <div class="mt-1 text-xs font-normal text-gray-500">
+                      <p>
+                        Account Name: <strong>Fresh On Time</strong>
+                        <br />
+                        Account Number: <strong>1234567890</strong>
+                        <br />
+                        Bank: <strong>Bank of Ceylon</strong>
+                        <br />
+                        Branch: <strong>Colombo</strong>
+                        <br />
+                        Branch Code: <strong>123</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+              <div
+                *ngIf="paymentForm.invalid && paymentForm.touched"
+                class="col-span-full text-red-500 text-sm mt-2"
+              >
+                Please select a payment method to proceed.
+              </div>
+
+            
+              <div class="col-span-full mt-2 flex justify-between">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  iconPos="left"
+                  [text]="true"
+                  size="small"
+                  severity="contrast"
+                  (onClick)="activateCallback(2)"
+                ></p-button>
+                <p-button
+                  label="Next"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  [text]="true"
+                  size="small"
+                  type="submit"
+                  [severity]="paymentForm.invalid ? 'danger' : 'contrast'"
+                ></p-button>
+              </div>
+            </form>
+          </ng-template>
+        </p-step-panel>
+ -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+        <!-- ******* Review & Place Order ******** -->
+        <!-- ************************************* -->
+        <!-- ************************************* -->
+
+        <p-step-panel [value]="3">
+          <ng-template #content let-activateCallback="activateCallback">
+            <form
+              [formGroup]="paymentForm"
+              (ngSubmit)="onPaymentSubmit()"
+              class="grid grid-cols-6 gap-2 mx-auto max-w-screen-sm"
+            >
+              <div
+                class="text-center mt-4 mb-4 text-xl col-span-full font-semibold"
+              >
+                Review & Place Order
+              </div>
+              <div class="col-span-full">
+                <p-table [value]="bag!.items" size="small">
+                  <ng-template #header>
+                    <tr>
+                      <th [style]="{ 'text-align': 'left' }">Product</th>
+                      <th [style]="{ 'text-align': 'right' }">Quantity</th>
+                      <th [style]="{ 'text-align': 'right' }">Price(LKR)</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template #body let-item>
+                    <tr>
+                      <td [style]="{ 'text-align': 'left' }">
+                        {{ item.name }}
+                      </td>
+                      <td [style]="{ 'text-align': 'right' }">
+                        {{ item.buyingQuantity }}{{ item.measurementType }}
+                      </td>
+                      <td [style]="{ 'text-align': 'right' }">
+                        {{ getItemPrice(item) }}
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template #footer>
+                    <tr>
+                      <td
+                        [style]="{ 'text-align': 'left', border: 'none' }"
+                        colspan="1"
+                      >
+                        Original price
+                      </td>
+
+                      <td
+                        [style]="{ 'text-align': 'right', border: 'none' }"
+                        colspan="2"
+                        class="font-medium"
+                      >
+                        {{ getOriginalPrice(bag!) | currency : "LKR " }}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td
+                        [style]="{ 'text-align': 'left', border: 'none' }"
+                        colspan="1"
+                      >
+                        Savings
+                      </td>
+
+                      <td
+                        [style]="{ 'text-align': 'right', border: 'none' }"
+                        colspan="2"
+                      >
+                        <span class="text-green-600 font-medium">
+                          - {{ getTotalSavings(bag!) | currency : "LKR " }}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td [style]="{ 'text-align': 'left',  }" colspan="1">
+                        Service Fee
+                      </td>
+
+                      <td
+                        [style]="{ 'text-align': 'right',  }"
+                        colspan="2"
+                        class="font-medium"
+                      >
+                        {{ getServiceFee(bag!) | currency : "LKR " }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        [style]="{ 'text-align': 'left', border: 'none' }"
+                        colspan="1"
+                        class="font-bold text-gray-900"
+                      >
+                        Total
+                      </td>
+
+                      <td
+                        [style]="{ 'text-align': 'right', border: 'none' }"
+                        colspan="2"
+                        class="font-bold text-gray-900"
+                      >
+                        {{ geTotal(bag!) | currency : "LKR " }}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+
+              <!-- Showing User his shipping details -->
+              <div class="col-span-full mt-4">
+                <div>
+                  <div class="text-lg font-semibold mb-2">Delivery to</div>
+                  <div class="text-sm text-gray-700">
+                    <p>
+                      {{ deliveryAddress?.firstName }}
+                      {{ deliveryAddress?.lastName }}
+                    </p>
+                    <p>
+                      {{ deliveryAddress?.streetAddress }}
+                      @if (deliveryAddress?.streetAddress2) {,
+                      {{ deliveryAddress?.streetAddress2 }}
+                      <br />
+                      }
+                      {{ deliveryAddress?.city }}
+
+                      {{ deliveryAddress?.postalCode }}
+                    </p>
+                    <p>
+                      {{ deliveryAddressForm.get("phoneNumber")?.value }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!-- Showing selected payment method -->
+              <div class="col-span-full mt-4">
+                <div>
+                  <div class="text-lg font-semibold mb-2">Payment Method</div>
+                  <div class="text-sm text-gray-700">
+                    <p>
+                      {{
+                        paymentForm.get("paymentMethod")?.value === "delivery"
+                          ? "Payment on Delivery"
+                          : paymentForm.get("paymentMethod")?.value === "bank"
+                          ? "Bank Transfer"
+                          : "Not selected"
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-span-full sticky bottom-0 bg-white/50 py-4">
+                <p-button
+                  label="Place Order"
+                  type="submit"
+                  severity="primary"
+                  [fluid]="true"
+                  [rounded]="true"
+                  [disabled]="
+                    paymentForm.invalid || deliveryAddressForm.invalid
+                  "
+                ></p-button>
+              </div>
+
+              <div class="col-span-full flex justify-between">
+                <p-button
+                  label="Back"
+                  icon="pi pi-arrow-left"
+                  iconPos="left"
+                  [text]="true"
+                  size="small"
+                  severity="contrast"
+                  (onClick)="activateCallback(2)"
+                ></p-button>
+              </div>
+            </form>
+          </ng-template>
+        </p-step-panel>
+      </p-step-panels>
+    </p-stepper>
+  </div>
+</section>

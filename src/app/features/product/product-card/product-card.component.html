@@ -1,7 +1,7 @@
 <div
-  class="rounded-lg  {{
-    showBorders ? 'border border-gray-200 bg-white' : ''
-  }} p-6 shadow-sm"
+  class="rounded-lg bg-white  {{
+    showBorders ? 'border border-gray-200 ' : ''
+  }} p-4 shadow-sm"
 >
   <div class="h-56 w-full">
     @if (loading) {
@@ -33,6 +33,7 @@
     }@else {
     <a
       href="#"
+      class="text-lg font-semibold leading-tight text-gray-900 hover:underline"
       class="text-lg font-semibold leading-tight text-gray-900 hover:underline"
     >
       {{ name }}
@@ -68,34 +69,39 @@
         </ng-template>
       </p-rating>
 
+      <p class="text-sm font-medium text-gray-900"></p>
       <p class="text-sm font-medium text-gray-900">
         {{ rating }}
       </p>
       <p class="text-sm font-medium text-gray-500">({{ totalReviews }})</p>
+      <p class="text-sm font-medium text-gray-500">({{ totalReviews }})</p>
     </div>
-    }
-
+    } @if (getBadgesData()) {
     <ul class="mt-2 flex flex-wrap items-center gap-4">
       @for (badge of getBadgesData(); track badge[0]) {
       <li class="flex items-center gap-2">
         <i class="  {{ badge[1] }} text-gray-500"></i>
+        <p class="text-sm font-medium text-gray-500"></p>
         <p class="text-sm font-medium text-gray-500">
           {{ badge[0] }}
         </p>
       </li>
       }
     </ul>
+    }
 
-    <div class="mt-4 flex items-center justify-between gap-4">
+    <div class="mt-1 flex items-center justify-between gap-4">
       @if (loading) {
       <p-skeleton class="w-[40%]" height="2rem" borderRadius="4px" />
       <p-skeleton class="w-[60%]" height="2rem" borderRadius="4px" />
       }@else {
-      <p class="text-2xl font-extrabold leading-tight text-gray-900">
+      <p class="text-xl font-extrabold leading-tight text-gray-900">
         {{ getPrice() }}
       </p>
       <p-menu #menu [model]="userBags" appendTo="body" [popup]="true" />
       <p-button
+        label="{{ !smallAddButton ? 'Add to Bag' : '' }}"
+        icon="pi {{ smallAddButton ? 'pi-plus' : 'pi-shopping-bag' }}"
         label="{{ !smallAddButton ? 'Add to Bag' : '' }}"
         icon="pi {{ smallAddButton ? 'pi-plus' : 'pi-shopping-bag' }}"
         (onClick)="menu.toggle($event)"
